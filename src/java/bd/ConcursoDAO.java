@@ -456,35 +456,37 @@ public class ConcursoDAO {
         }
     }
     
-    /*public ArrayList<CalificacionActividad> cargarListaAdjuntosCalificaciones(CalificacionActividad calificacionActividad) throws SQLException {        
-        ArrayList<CalificacionActividad> listaAdjuntosActividad = new ArrayList<>();
+    public ArrayList<AdjuntosActividad> cargarListaAdjuntosCalificaciones(CalificacionActividad calificacionActividad) throws SQLException {        
+        AdjuntosActividad adjActividad;
+        ArrayList<AdjuntosActividad> listaAdjuntosActividadJueces = new ArrayList<>();
         ResultSet rs;
         Consulta consulta = null;
         try {
             
             consulta = new Consulta(getConexion());
             String sql
-                    = " SELECT cod_actividad, cod_grupo, calificacion " +
-                        " from campaña.calificacion_activbidad " +
-                        " where cod_actividad='"+calificacionActividad.getCodActividad()+"' ";
+                    = " select nombre, direccion, cod_grupo, cod_adjunto " +
+                    "from campaña.adjuntos_actividad " +
+                    "where cod_actividad='"+calificacionActividad.getCodActividad()+"' ";
 
             rs = consulta.ejecutar(sql);
 
-            while (rs.next()) {
-                
-                adjuntosActividad=new AdjuntosActividad();
-                adjuntosActividad.setCodAdjunto(rs.getInt("cod_adjunto"));
-                adjuntosActividad.setNombre(rs.getString("nombre"));
-                listaAdjuntosActividad.add(adjuntosActividad);
+            while (rs.next()) {                
+                adjActividad=new AdjuntosActividad();
+                adjActividad.setCodAdjunto(rs.getInt("cod_adjunto"));
+                adjActividad.setNombre(rs.getString("nombre"));
+                adjActividad.setDireccion(rs.getString("direccion"));
+                adjActividad.setGrupoConcurso(new GrupoConcurso(rs.getString("cod_grupo"),null, null, null));
+                listaAdjuntosActividadJueces.add(adjActividad);
             }
-            return listaAdjuntosActividad;
+            return listaAdjuntosActividadJueces;
 
         } catch (SQLException ex) {
             throw ex;
         } finally {
             consulta.desconectar();
         }
-    }*/
+    }
     
     
     

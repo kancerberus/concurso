@@ -164,7 +164,7 @@ public class GestorConcurso extends Gestor implements Serializable{
             }
     }
     
-    /*public ArrayList<CalificacionActividad> cargarListaAdjuntosCalificaciones(CalificacionActividad calificacionActividad) throws Exception {
+    public ArrayList<AdjuntosActividad> cargarListaAdjuntosCalificaciones(CalificacionActividad calificacionActividad) throws Exception {
         try {
                 abrirConexion();
                 ConcursoDAO concursoDAO = new ConcursoDAO(conexion);
@@ -172,7 +172,7 @@ public class GestorConcurso extends Gestor implements Serializable{
             } finally {
                 cerrarConexion();
             }
-    }*/
+    }
     
     public ArrayList<Concurso> listarConcursos(String nitsesion) throws Exception {
         try {

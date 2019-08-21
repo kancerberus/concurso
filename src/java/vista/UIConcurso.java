@@ -17,8 +17,6 @@ import java.io.InputStream;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
@@ -66,7 +64,8 @@ public class UIConcurso implements Serializable {
     private GrupoConcursoParticipantes grupoParticipantes=new GrupoConcursoParticipantes();
     private String codGrupo;    
     private Empleado empleado=new Empleado();
-    private Actividad actividad;    
+    private Actividad actividad;   
+    private AdjuntosActividad adjActividad;
     private Empresa empresa=new Empresa();  
     private CalificacionActividad calificacionActividad= new CalificacionActividad();    
     private Boolean captain;        
@@ -79,7 +78,7 @@ public class UIConcurso implements Serializable {
     
     private ArrayList<SelectItem> listActividades=new ArrayList<>();
     private ArrayList<Actividad> listActividadess=new ArrayList<>();
-    private ArrayList<AdjuntosActividad> listaAdjuntos=new ArrayList<>();
+    private ArrayList<AdjuntosActividad> listaAdjuntos=new ArrayList<>();    
     private ArrayList<SelectItem> listActividadesJueces=new ArrayList<>();
     private ArrayList<Actividad> listActividadesJuecess=new ArrayList<>();
     private ArrayList<SelectItem> listaConcurso=new ArrayList<>();    
@@ -262,12 +261,9 @@ public class UIConcurso implements Serializable {
         
     }   
     
-     public void subirItemActividadAdjuntosJueces() {    
-        try {
-            calificacionActividad= (CalificacionActividad) UtilJSF.getBean("varCalificaciones");                     
-        } catch (Exception e) {
-        }
-        
+     public void subirItemActividadAdjuntosJueces() {            
+        calificacionActividad= (CalificacionActividad) UtilJSF.getBean("varCalificaciones");
+        this.cargarAdjuntosCalificaciones();
     }   
     
     public void eliminarAdjuntos(){
@@ -787,10 +783,12 @@ public class UIConcurso implements Serializable {
 
     public StreamedContent getFileDownload() {        
         try {         
+            adjActividad= (AdjuntosActividad) UtilJSF.getBean("varVerAdjuntos");
             
             
-            InputStream stream = new FileInputStream("C:/Concursos/"+grupoConcurso.getSubempresa().getEmpresa().getNitempresa()+"/");
-            fileDownload = new DefaultStreamedContent(stream, null, "comprobante.pdf");
+            String archivo=adjActividad.getDireccion()+"/"+adjActividad.getNombre();
+            InputStream stream = new FileInputStream(archivo);
+            fileDownload = new DefaultStreamedContent(stream, null, adjActividad.getNombre());
         } catch (FileNotFoundException ex) {
             Logger.getLogger(UIConcurso.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -844,15 +842,24 @@ public class UIConcurso implements Serializable {
         }
     }
     
-    /*public void cargarAdjuntosCalificaciones(){
+    public void cargarAdjuntosCalificaciones(){
         try {
             gestorConcurso=new GestorConcurso();
             listaAdjuntos=new ArrayList<>();
             
             listaAdjuntos.addAll(gestorConcurso.cargarListaAdjuntosCalificaciones(calificacionActividad));
         } catch (Exception e) {
+            Logger.getLogger(UIConcurso.class.getName()).log(Level.SEVERE, null, e);
         }
-    }*/
+    }
+
+    public AdjuntosActividad getAdjActividad() {
+        return adjActividad;
+    }
+
+    public void setAdjActividad(AdjuntosActividad adjActividad) {
+        this.adjActividad = adjActividad;
+    }
     
     public ArrayList<AdjuntosActividad> getListaAdjuntos() {
         return listaAdjuntos;

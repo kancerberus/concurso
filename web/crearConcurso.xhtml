@@ -93,7 +93,7 @@ and open the template in the editor.
                             </p:fieldset>                                 
                                 
                                 
-                            <p:dialog  width="60%" height="60%" widgetVar="dlg" header="Actividades" resizable="false"    
+                            <p:dialog  width="auto" height="60%" widgetVar="dlg" header="Actividades" resizable="false"    
                                        styleClass="for-update" 
                                           > 
 
@@ -106,10 +106,14 @@ and open the template in the editor.
                                         Observaciones
                                         <p:inputTextarea value="#{concursoBean.actividad.observacion}" cols="50"/>
                                         Fecha Limite
-                                        <p:calendar value="#{concursoBean.actividad.fechaLimite}" pattern="dd-mm-yyyy" />
-                                        
+                                        <p:calendar value="#{concursoBean.actividad.fechaLimite}" pattern="yyyy-mm-dd" />                                        
                                         <p:commandButton icon="ui-icon-newwin" update="actividadesConcurso"  oncomplete="PF('dlg').show();" onclick="PF('dlg').show();"
                                                 type="submit" value="Generar"  actionListener="#{concursoBean.crearActividad()}"/>
+                                        <p:outputLabel/>
+                                        <p:outputLabel/>
+                                        <p:outputLabel/>
+                                        <p:outputLabel/>
+                                        <p:outputLabel  value="yyyy-MM-dd"/>
                                 </h:panelGrid>
                                         <h:panelGrid width="100%">
                                         <p:column >

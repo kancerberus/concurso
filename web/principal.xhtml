@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"     
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:c="http://java.sun.com/jsp/jstl/core">
+    <head>
+        <title>CAMPAÑA</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0"/>        
+        <link href="resources/main.css" rel="stylesheet" type="text/css" />
+            
+        <h:body>
+            <div id="base">
+                <div id="dintel"> 
+                    <div id="logo"></div>     	
+                        <div id="menu">
+                            <form id="pagArriba" name="pagArriba" method="post" action="/pagarriba.xhtml" enctype="application/x-www-form-urlencoded">           
+                            </form>         
+                        </div>            
+                </div>
+            </div>   
+        </h:body>
+        
+        <h:head>
+        <h:body>
+        <h:outputStylesheet name="general.css"/>        
+        <table>
+            <tr>
+                <!-- primera columna -->
+                <td valign="top">
+                    <h:form id="formMenu">
+                        <p:growl id="messages"/>
+                        <h:panelGroup id="pnlMenu">                                                                                    
+                            <!--aqui menu -->
+                            <p:panelMenu style="width:200px">
+                                <c:forEach items="#{loginBean.listaMenu}" var="menu">
+                                    <p:submenu label="#{menu.etiqueta}" >
+                                        <c:forEach items="#{menu.listaSubMenu}" var="subMenu">
+                                            <p:menuitem value="#{subMenu.etiqueta}" update="pnlPrincipal" ajax="false" icon="#{subMenu.imagen}" actionListener="#{gestorPrincipal.selGeneral(subMenu.opcion)}" />
+                                        </c:forEach>
+                                    </p:submenu>
+                                </c:forEach>                                                                   
+                                <p:submenu label="Sesion" >
+                                    <p:menuitem value="Cerrar sesion"  action="#{loginBean.cerrarSesion()}" icon="ui-icon-power"/>                                    
+                                </p:submenu>                                
+                            </p:panelMenu>                            
+                            <p:panel id="status" style="width:193px">
+                                <table>                                
+                                    <tr><td>
+                                            <b>Usuario:</b><p:outputLabel id="username" value="#{loginBean.sesion.usuario.nomusuario}"/>                                        
+                                    </td></tr>                                                                                              
+                                    <tr><td>                                        
+                                           <b>Nombre:</b><p:outputLabel value="#{loginBean.sesion.usuario.nombre}" style="font-size:13px"/>
+                                    </td></tr>                                
+                                    <tr><tr><td>
+                                            <p:clock pattern="dd/MM/yyyy HH:mm:ss" mode="server" />
+                                    </td></tr></tr>                                
+                                </table>
+                            </p:panel>                             
+                        </h:panelGroup>
+                    </h:form>
+                </td>
+
+               <!--aquisegunda columna-->
+               <td valign="top" rowspan="2">
+
+                   <h:form>
+                    <h:panelGroup id="pnlPrincipal">    
+                        <h:panelGroup rendered="#{gestorPrincipal.crearConcurso}">                            
+                            <ui:include src="crearConcurso.xhtml"></ui:include>                        
+                        </h:panelGroup>                        
+                        <h:panelGroup rendered="#{gestorPrincipal.concursos}">
+                            <ui:include src="concursos.xhtml"></ui:include>                            
+                        </h:panelGroup> 
+                        <h:panelGroup rendered="#{gestorPrincipal.equipos}">
+                            <ui:include src="equipos.xhtml"></ui:include>                            
+                        </h:panelGroup> 
+                        <h:panelGroup rendered="#{gestorPrincipal.jueces}">                                                        
+                            <ui:include src="jueces.xhtml"></ui:include>                                                    
+                        </h:panelGroup>                         
+                    </h:panelGroup>                    
+                  </h:form>
+                </td>
+            </tr>
+        </table>        
+    </h:body> 
+   </h:head>     
+  </head>      
+</html>

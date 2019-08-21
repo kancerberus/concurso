@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"     
+      xmlns:f="http://java.sun.com/jsf/core"      
+      xmlns:ui="http://java.sun.com/jsf/facelets"        
+            
+      >
+    
+    
+    <h:body>
+        <ui:composition >
+            <h:form styleClass="concursos" enctype="multipart/form-data">
+               <p:growl id="aviso" showDetail="true" life="5000" />
+               <p:panel  header="CARGAR EVIDENCIAS" styleClass="pnlConcursos"  
+                         style="width:auto;">
+                    <table>
+                        <tr><td>                              
+                            <p:fieldset legend="Datos de Inicio de Sesión" style="margin-bottom:10px; margin-top:10px;" >
+                                <table cellpadding="5">                        
+                                    <tr>
+                                        <td align="center">
+                                            <p:panelGrid id="tblDatosSesion" columns="4" style="width:1000px; font-size: 90%;">
+                                                <f:facet name="header">
+                                                    <h:outputText value="" />
+                                                </f:facet>
+                                                <h:outputText value="Nombre de la empresa" style="font-weight: bold;" /><h:outputText value="#{loginBean.sesion.usuario.subEmpresa.nombre}" />                                                
+                                                <h:outputText value="Fecha" style="font-weight: bold;"/>
+                                                <h:outputText value="#{currentDate}">
+                                                    <f:convertDateTime pattern="MM/dd/yyyy" type="date"/> 
+                                                </h:outputText>                                                
+                                                <h:outputText value="Usuario de sesion" style="font-weight: bold;" /><h:outputText value="#{loginBean.sesion.usuario.nomusuario}"/>
+                                                <h:outputText value="Nombre" style="font-weight: bold;" /><h:outputText value="#{loginBean.sesion.usuario.nombre}"/>
+                                            </p:panelGrid>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </p:fieldset> 
+                                <p:fieldset legend="Concursos" style="margin-bottom:10px; margin-top:10px;" >                                    
+                                    Concursos: *
+                                    <p:selectOneMenu value="#{concursoBean.concurso.codConcurso}">
+                                    <f:selectItem itemLabel="Seleccione..." itemValue="" />                                                
+                                    <f:selectItems   value="#{concursoBean.listaConcursosEmpresas}" />
+                                    <p:ajax update="@(.gridBasesConcurso), @(.pnlConcursos), gConcursos " listener="#{concursoBean.getListaGruposConcursos}" />                                    
+                                    </p:selectOneMenu>
+                                    Equipos: *
+                                    <p:selectOneMenu id="gConcursos" value="#{concursoBean.grupoConcurso.codGrupo}">
+                                    <f:selectItem itemLabel="Seleccione..." itemValue="" />                                                
+                                    <f:selectItems   value="#{concursoBean.listaGruposConcursos}" />  
+                                    <p:ajax update="  acum,actividadesEquipo "  listener="#{concursoBean.getListActividades}"/>
+                                    </p:selectOneMenu>                                    
+                                    Calificacion Acumulada
+                                    <p:outputLabel id="acum" style="font-size: 15px;font-weight: bolder; color: darkgreen" value="#{concursoBean.puntajeAcum}"/>
+                                </p:fieldset>  
+                                <p:fieldset styleClass="gridBasesConcurso" legend="Bases De Concurso" style="margin-bottom:10px; margin-top:10px;" >
+                                <table cellpadding="5">                        
+                                    <tr>
+                                        <td align="center">
+                                            <p:panelGrid   columns="4" style="width:1000px; font-size: 90%;">
+                                                <f:facet name="header">
+                                                    <h:outputText value="" />
+                                                </f:facet>
+                                                <h:outputText value="Nombre " style="font-weight: bold;" />
+                                                <h:outputText value="#{concursoBean.concurso.nombre}" />                                                
+                                                <h:outputText value="Numero Max Participantes " style="font-weight: bold;" />
+                                                <h:outputText value="#{concursoBean.concurso.participantes}" />
+                                                <h:outputText value="Estado " style="font-weight: bold;" />
+                                                <h:outputText value="#{concursoBean.concurso.estado ? 'Activo' : 'Inactivo'}" />
+                                                <h:outputText value="Fecha Limite " style="font-weight: bold;" />
+                                                <h:outputText value="#{concursoBean.concurso.fecha_limite_insc}"/>                                                
+                                            </p:panelGrid>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </p:fieldset>
+                                <p:fieldset legend="Actividades Equipo: #{concursoBean.grupoConcurso.nombre}" style="margin-bottom:10px; margin-top:10px;" >                                    
+                                    <p:dataTable id="actividadesEquipo" var="varActividadAdjuntos" value="#{concursoBean.listActividadess}"
+                                                 rowStyleClass="letra-xx-small-centro" style="font-size: 10px;width: 100%">                                        
+                                        <p:column headerText="Actividad">
+                                            <h:outputText value="#{varActividadAdjuntos.nombre}"/>
+                                        </p:column>                                                                                            
+                                        <p:column headerText="Observacion">
+                                            <h:outputText value="#{varActividadAdjuntos.observacion}"/>
+                                        </p:column>                                     
+                                        <p:column headerText="Fecha Limite">
+                                            <h:outputText value="#{varActividadAdjuntos.fechaLimite}"/>
+                                        </p:column>                                        
+                                        <p:column width="6%" headerText="Actividad">
+                                                <p:commandButton id="openDialogLink"  icon="ui-icon-plus" value="Adjuntos" onclick="PF('dlg').show();" 
+                                                                 oncomplete="PF('dlg').show();"   >
+                                                    <p:ajax update="@(.dlgAdjuntos)" listener="#{concursoBean.subirItemActividadAdjuntos()}"/>
+                                                </p:commandButton>
+                                        </p:column>
+                                    </p:dataTable>
+                                </p:fieldset>
+                                
+                                <p:dialog id="picture" widgetVar="dlg" width="30%" header="Adjuntos Actividad" resizable="false" styleClass="dlgAdjuntos"
+                                          >                                        
+                                
+                                <p:ajax event="close" update="aviso" listener="#{concursoBean.handleClose}" />
+                                <h:panelGrid width="100%" columns="1" >                                        
+                                        <p:column>
+                                            <p:outputLabel value="Adjunto: "/>                                            
+                                                <p:fileUpload fileUploadListener="#{concursoBean.upload}" mode="advanced" dragDropSupport="false"
+                                            auto="true" update="adjuntos" fileLimit="5"  />
+                                        </p:column>
+                                    <p:column>
+                                        <p:commandButton icon="ui-icon-trash">
+                                            <p:ajax  listener="#{concursoBean.eliminarAdjuntos()}" update="adjuntos"/>
+                                        </p:commandButton>
+                                    </p:column>
+                                    <p:column width="100%">
+                                            <p:dataTable  id="adjuntos" var="varAdjuntos" value="#{concursoBean.listaAdjuntos}"
+                                                 rowStyleClass="letra-xx-small-centro" style="font-size: 10px;width: 100%">                                        
+                                                <p:column headerText="Adjunto">
+                                                    <h:outputText value="#{varAdjuntos.nombre}"/>
+                                                </p:column>                                                              
+                                            </p:dataTable>
+                                        </p:column>
+                                    </h:panelGrid>
+                                </p:dialog>
+                                            
+                           </td>
+                        </tr>   
+                    </table> 
+                </p:panel>                                                
+            </h:form>
+        </ui:composition>
+    </h:body>
+
+
+</html>

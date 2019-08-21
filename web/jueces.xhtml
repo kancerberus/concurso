@@ -1,0 +1,198 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"     
+      xmlns:f="http://java.sun.com/jsf/core"      
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      >
+    
+    
+    <h:body>
+        <ui:composition>
+            <h:form id="jueces">
+               <p:growl id="aviso" showDetail="true" life="5000" />
+                <p:panel header="CALIFICACION JUECES" id="pnlJueces"  
+                         style="width:auto;">
+                    <table>
+                                                      
+                            <p:fieldset legend="Datos de Inicio de Sesión" style="margin-bottom:10px; margin-top:10px;" >
+                                <table cellpadding="5">                        
+                                    <tr>
+                                        <td align="center">
+                                            <p:panelGrid id="tblDatosSesion" columns="4" style="width:1000px; font-size: 90%;">
+                                                <f:facet name="header">
+                                                    <h:outputText value="" />
+                                                </f:facet>
+                                                <h:outputText value="Nombre de la empresa" style="font-weight: bold;" /><h:outputText value="#{loginBean.sesion.usuario.subEmpresa.nombre}" />                                                
+                                                <h:outputText value="Fecha" style="font-weight: bold;"/>
+                                                <h:outputText value="#{currentDate}">
+                                                    <f:convertDateTime pattern="MM/dd/yyyy" type="date"/> 
+                                                </h:outputText>                                                
+                                                <h:outputText value="Usuario de sesion" style="font-weight: bold;" /><h:outputText value="#{loginBean.sesion.usuario.nomusuario}"/>
+                                                <h:outputText value="Nombre" style="font-weight: bold;" /><h:outputText value="#{loginBean.sesion.usuario.nombre}"/>
+                                            </p:panelGrid>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </p:fieldset> 
+                                
+                            <p:fieldset legend="Concursos" style="margin-bottom:10px; margin-top:10px;" >                                    
+                                    Centro Trabajo *:
+                                    <p:selectOneMenu id="subempresas" value="#{concursoBean.nitSubemrpesa}" > 
+                                    <f:selectItem itemLabel="Seleccione..." itemValue="" />                                                
+                                    <f:selectItems  value="#{concursoBean.listaSubEmpresas}" />                                      
+                                    <p:ajax update="gConcursos" listener="#{concursoBean.getListConcursosSubempresa}"/>
+                                    </p:selectOneMenu>
+                                    
+                                    Concursos: *
+                                    <p:selectOneMenu id="gConcursos" value="#{concursoBean.concurso.codConcurso}">
+                                    <f:selectItem itemLabel="Seleccione..." itemValue="" />                                                
+                                    <f:selectItems   value="#{concursoBean.listConcursosSubempresa}" />                                      
+                                    <p:ajax update="gEquipos" listener="#{concursoBean.getListaGrupoConcurso}"/>
+                                    </p:selectOneMenu>
+                                    
+                                    Equipos: *
+                                    <p:selectOneMenu id="gEquipos" value="#{concursoBean.grupoConcurso.codGrupo}">
+                                    <f:selectItem itemLabel="Seleccione..." itemValue="" />                                                
+                                    <f:selectItems   value="#{concursoBean.listGruposConcurso}" />                                      
+                                    <p:ajax update="actividadesEquipo" listener="#{concursoBean.cargarCalificaciones()}"/>
+                                    </p:selectOneMenu>
+                                    
+                                    
+                            </p:fieldset>
+                                
+                            <p:fieldset legend="Actividades Equipo" style="margin-bottom:10px; margin-top:10px;" >                                    
+                                <p:dataTable id="actividadesEquipo" var="varCalificaciones" value="#{concursoBean.listCalificacionesActividad}"
+                                             rowStyleClass="letra-xx-small-centro" style="font-size: 10px;width: 100%">                                        
+                                    <p:column headerText="Actividad">
+                                        <h:outputText value="#{varCalificaciones.actividad.nombre}"/>
+                                    </p:column>                                                                                            
+                                    <p:column width="20%" headerText="Calificacion">
+                                        <h:outputText value="#{varCalificaciones.calificacion}"/>
+                                    </p:column>
+                                    <p:column width="7%" headerText="Calificacion Actividad">
+                                            <p:commandButton id="openDialogCalificacion"  icon="ui-icon-plus" value="Calificacion" onclick="PF('dlg2').show();" 
+                                                             oncomplete="PF('dlg2').show();" actionListener="#{concursoBean.subirItemCalificacion()}"  update="@none" process="@this"/>
+                                    </p:column >
+                                    <p:column width="6%" headerText="Ver Adjuntos">                                        
+                                        <p:commandButton id="openDialogLink"  icon="ui-icon-clipboard" value="ver Adjuntos" onclick="PF('dlg3').show();" 
+                                                                 oncomplete="PF('dlg3').show();"   >
+                                                    <p:ajax update="@(.dlgAdjuntosJueces)" listener="#{concursoBean.subirItemActividadAdjuntosJueces()}"/>
+                                        </p:commandButton>
+                                    </p:column>
+                                    
+                                </p:dataTable>
+                            </p:fieldset>   
+                                
+                                
+                            <p:dialog id="calificaciones" width="20%" height="60%" widgetVar="dlg2" header="Calificacion Actividad" resizable="false" >                                        
+                                
+                                <p:ajax event="close" update="aviso" listener="#{concursoBean.handleClose}" />
+                                
+                                <h:panelGrid columns="2" >
+                                        <p:column width="60%">
+                                            <p:outputLabel value="Calificacion: "/>                                            
+                                        </p:column>
+                                        <p:column width="100%">
+                                            <p:inputText value="#{concursoBean.calificacionActividad.calificacion}"/>                                            
+                                        </p:column>
+                                    <p:column>
+                                        <p:commandButton id="guardarCalif"  icon="ui-icon-disk" value="Guardar" update="actividadesEquipo" action="#{concursoBean.guardarCalificacion}" />
+                                    </p:column>
+                                </h:panelGrid>
+                                </p:dialog>
+                                
+                                
+                                <p:dialog id="adjuntosDlg" widgetVar="dlg3" width="30%" header="Adjuntos Actividad" resizable="false" styleClass="dlgAdjuntosJueces"
+                                          >                                        
+                                
+                                <p:ajax event="close" update="aviso" listener="#{concursoBean.handleClose}" />
+                                <p:panelGrid columns="1">
+                                    <p:dataTable  value="#{uiEvaluacionAdjuntos.evaluacionAdjuntosList}" var="varVerAdjuntos" emptyMessage="No tiene soportes adjuntos."
+                                                rowStyleClass="letra-xx-small-centro" widgetVar="evaluacionAdjuntosTable" rows="5" paginator="true"
+                                                >
+                                      <f:facet name="header">
+                                          Soportes Cargados
+                                      </f:facet>
+                                      <p:columnGroup type="header">  
+                                          <p:row>  
+                                              <p:column  headerText="Opciones"  width="15%"/>
+                                              <p:column headerText="Categoria" filterBy="#{varEvaluacionAdjunto.adjuntosCategoria.nombre}" sortBy="#{varEvaluacionAdjunto.adjuntosCategoria.nombre}"/>
+                                              <p:column headerText="Tipo" filterBy="#{varEvaluacionAdjunto.adjuntosCategoria.adjuntosCategoriaTipo.nombre}" sortBy="#{varEvaluacionAdjunto.adjuntosCategoria.adjuntosCategoriaTipo.nombre}"
+                                                        width="15%"/>
+                                              <p:column headerText="Responsable" filterBy="#{varEvaluacionAdjunto.responsable.nombresApellidos}" />
+                                              <p:column  headerText="Descripción"/>
+                                              <p:column  headerText="Fecha" sortBy="#{varEvaluacionAdjunto.fecha}"/>
+                                              <p:column  headerText="Archivo" sortBy="#{varEvaluacionAdjunto.archivo}" width="7%"/>
+                                              <p:column  headerText="Ver" sortBy="#{varEvaluacionAdjunto.version}" width="4%"/>
+                                              <p:column  headerText="Vigencia" sortBy="#{varEvaluacionAdjunto.mesesVigencia}" width="7%"/>
+                                              <p:column  headerText="Fecha Fin Vigencia" sortBy="#{varEvaluacionAdjunto.fechaFinVigencia}"/>
+                                          </p:row> 
+                                      </p:columnGroup>
+
+                                      <p:column>
+                                          <p:panelGrid columns="3">
+                                              <p:commandButton icon="ui-icon-pencil" title="Modificar Adjunto" action="#{uiEvaluacionAdjuntos.modificarAdjunto()}" update="formSeccionDetalleItems:opAdjunto"/>
+                                              <p:commandButton icon="ui-icon-arrowthick-1-s" title="Ver Adjunto" ajax="false">
+                                                  <p:fileDownload value="#{uiEvaluacionAdjuntos.fileDownload}" />
+                                              </p:commandButton>
+                                              <p:commandButton icon="ui-icon-trash" title="Eliminar Adjunto" action="#{uiEvaluacionAdjuntos.eliminarAdjunto()}" update="formSeccionDetalleItems:opAdjunto">
+                                                  <p:confirm header="Eliminar Soporte" message="Desea eliminar el soporte?" icon="ui-icon-alert" />
+                                              </p:commandButton>
+                                          </p:panelGrid>
+                                      </p:column>
+                                      <p:column>
+                                          <h:outputText value="#{varEvaluacionAdjunto.adjuntosCategoria.nombre}"/>
+                                      </p:column>
+                                      <p:column>
+                                          <h:outputText value="#{varEvaluacionAdjunto.adjuntosCategoria.adjuntosCategoriaTipo.nombre}"/>
+                                      </p:column>
+                                      <p:column>
+                                          <h:outputText value="#{varEvaluacionAdjunto.responsable.nombresApellidos}"/>
+                                      </p:column>
+                                      <p:column>
+                                          <h:outputText value="#{varEvaluacionAdjunto.descripcion}"/>
+                                      </p:column>
+                                      <p:column>
+                                          <h:outputText value="#{varEvaluacionAdjunto.fecha}">
+                                              <f:convertDateTime pattern="dd/MM/yyyy" />
+                                          </h:outputText>
+                                      </p:column>
+                                      <p:column>
+                                          <p:panelGrid columns="2" style="border: none" rendered="#{not empty varEvaluacionAdjunto.archivo}">
+                                              <h:outputLabel class="ui-icon ui-icon-document" title="#{varEvaluacionAdjunto.archivoSimple}"/>
+                                              <h:outputText value="#{varEvaluacionAdjunto.archivoSimple}" title="#{varEvaluacionAdjunto.archivoSimple}"/>
+                                          </p:panelGrid>
+                                      </p:column>
+                                      <p:column>
+                                          <h:outputText value="#{varEvaluacionAdjunto.version}"/>
+                                      </p:column>
+                                      <p:column>
+                                          <h:outputText value="#{varEvaluacionAdjunto.mesesVigencia} #{varEvaluacionAdjunto.mesesVigencia eq 1?' Mes':' Meses'}"/>
+                                      </p:column>
+                                      <p:column>
+                                          <h:outputText value="#{varEvaluacionAdjunto.fechaFinVigencia}">
+                                              <f:convertDateTime pattern="dd/MM/yyyy" />
+                                          </h:outputText>
+                                      </p:column>
+
+                                  </p:dataTable>
+                                    
+                                </p:panelGrid>
+                                </p:dialog>
+                           
+                           
+                    </table> 
+                </p:panel>                                                
+            </h:form>
+        </ui:composition>
+    </h:body>
+
+
+</html>

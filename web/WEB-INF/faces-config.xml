@@ -1,0 +1,63 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<faces-config version="2.1"
+              xmlns="http://java.sun.com/xml/ns/javaee"
+              xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-facesconfig_2_1.xsd">
+            
+
+    <managed-bean>
+        <managed-bean-name>loginBean</managed-bean-name>
+        <managed-bean-class>vista.UILogin</managed-bean-class>
+        <managed-bean-scope>session</managed-bean-scope>
+    </managed-bean>    
+    <managed-bean>
+        <managed-bean-name>gestorPrincipal</managed-bean-name>
+        <managed-bean-class>controlador.GestorPrincipal</managed-bean-class>
+        <managed-bean-scope>session</managed-bean-scope>
+    </managed-bean>    
+    <managed-bean>
+        <managed-bean-name>UsuarioBean</managed-bean-name>
+        <managed-bean-class>vista.UIUsuario</managed-bean-class>
+        <managed-bean-scope>session</managed-bean-scope>
+    </managed-bean> 
+    <managed-bean>
+        <managed-bean-name>currentDate</managed-bean-name>
+        <managed-bean-class>java.util.Date</managed-bean-class>
+        <managed-bean-scope>session</managed-bean-scope>
+    </managed-bean>         
+    <managed-bean>
+    <managed-bean-name>empleadoBean</managed-bean-name>
+        <managed-bean-class>vista.UIEmpleado</managed-bean-class>
+        <managed-bean-scope>session</managed-bean-scope>
+    </managed-bean>
+    
+    <managed-bean>   
+    <managed-bean-name>subempresaBean</managed-bean-name>
+        <managed-bean-class>vista.UISubempresa</managed-bean-class>
+        <managed-bean-scope>session</managed-bean-scope>
+    </managed-bean>   
+    
+    <managed-bean>   
+    <managed-bean-name>empresaBean</managed-bean-name>
+        <managed-bean-class>vista.UIEmpresa</managed-bean-class>
+        <managed-bean-scope>session</managed-bean-scope>
+    </managed-bean>
+    
+    <managed-bean>   
+    <managed-bean-name>listasBean</managed-bean-name>
+        <managed-bean-class>vista.UIListas</managed-bean-class>
+        <managed-bean-scope>session</managed-bean-scope>
+    </managed-bean>
+    
+    <managed-bean>   
+    <managed-bean-name>incapacidadBean</managed-bean-name>
+        <managed-bean-class>vista.UIIncapacidad</managed-bean-class>
+        <managed-bean-scope>session</managed-bean-scope>
+    </managed-bean>    
+    <managed-bean>   
+    <managed-bean-name>concursoBean</managed-bean-name>
+        <managed-bean-class>vista.UIConcurso</managed-bean-class>
+        <managed-bean-scope>session</managed-bean-scope>
+    </managed-bean>
+
+</faces-config>

@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core"
+      >
+    
+    <h:body >
+        <ui:composition > 
+            
+            <h:form id="concurso"  enctype="multipart/form-data">
+               <p:growl id="avisoConcurso" showDetail="true" life="5000" />
+                <p:panel header="CONCURSO" id="pnlConcurso"  
+                         style="width:1080px;">
+                    <h:panelGroup id="avisoConcursoup">
+                    <table>
+                        <tr><td>
+                            <p:fieldset legend="Datos de Inicio de Sesión" style="margin-bottom:10px; margin-top:10px;" >
+                                <table cellpadding="5">                        
+                                    <tr>
+                                        <td align="center">
+                                            <p:panelGrid id="tblDatosSesion" columns="4" style="width:1000px; font-size: 90%;">
+                                                <f:facet name="header">
+                                                    <h:outputText value="" />
+                                                </f:facet>
+                                                <h:outputText value="Nombre de la empresa" style="font-weight: bold;" /><h:outputText value="#{loginBean.sesion.usuario.subEmpresa.nombre}" />                                                
+                                                <h:outputText value="Fecha" style="font-weight: bold;"/>
+                                                <h:outputText value="#{currentDate}">
+                                                    <f:convertDateTime pattern="MM/dd/yyyy" type="date"/> 
+                                                </h:outputText>                                                
+                                                <h:outputText value="Usuario de sesion" style="font-weight: bold;" /><h:outputText value="#{loginBean.sesion.usuario.nomusuario}"/>
+                                                <h:outputText value="Nombre" style="font-weight: bold;" /><h:outputText value="#{loginBean.sesion.usuario.nombre}"/>
+                                            </p:panelGrid>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </p:fieldset>
+                            <p:fieldset legend="Crear Concurso" style="margin-bottom:10px; margin-top:10px; width:auto" >                                       
+                                <h:panelGrid columns="4" cellpadding="5" style="width:auto; font-size: 90%;">
+                                
+                                    Empresa:<p:selectOneMenu value="#{concursoBean.empresa.nitempresa}" id="empresas">}
+                                    <f:selectItem itemLabel="Seleccione..." itemValue="" />                                                
+                                    <f:selectItems   value="#{listasBean.itemsEmpresas}"/>                                      
+                                    </p:selectOneMenu>
+                                    
+                                    Nombre Concurso:
+                                    <p:inputText value="#{concursoBean.concurso.nombre}"/>
+                                    Numero De Participantes Por Equipo:
+                                    <p:inputText value="#{concursoBean.concurso.participantes}"/>
+                                    Estado
+                                    <p:selectBooleanCheckbox value="#{concursoBean.concurso.estado}"  >
+                                        <p:ajax update="avisoConcurso" listener="#{concursoBean.addMessage()}" />
+                                    </p:selectBooleanCheckbox>
+                                    Fecha Limite Inscripcion
+                                    <p:calendar value="#{concursoBean.concurso.fecha_limite_insc}"/>
+                                    
+                                                                        
+                                    <p:commandButton icon="ui-icon-newwin" update="avisoConcurso, concursos"
+                                            type="submit" value="Generar"  actionListener="#{concursoBean.crearConcurso()}"/>
+                                </h:panelGrid>   
+                                <br/>
+                                <h:panelGrid columns="1" cellpadding="5" style="width:100%; font-size: 90%;">
+                                    <p:dataTable id="concursos" var="varConcursos" value="#{concursoBean.listaConcursoss}"
+                                        rowStyleClass="letra-xx-small-centro" style="font-size: 10px;width: 100%">
+                                        <p:column headerText="Opciones" style="font-weight: bolder">
+                                            <p:commandButton id="openDialogLink"  icon="ui-icon-plus" value="Crear Actividades" onclick="PF('dlg').show();"  
+                                                             update="@(.for-update)" oncomplete="PF('dlg').show();" actionListener="#{concursoBean.subirItemConcurso()}"  />
+                                        </p:column>                                        
+                                        <p:column headerText="Empresa" style="font-weight: bolder">
+                                            <h:outputText value="#{varConcursos.empresa.nombre}"/>
+                                        </p:column>
+                                        <p:column headerText="Nombre Concurso" style="font-weight: bolder">
+                                            <h:outputText value="#{varConcursos.nombre}"/>
+                                        </p:column>                                                                                
+                                        <p:column headerText="Numero de Participantes" style="font-weight: bolder">
+                                            <h:outputText value="#{varConcursos.participantes}"/>
+                                        </p:column>
+                                        <p:column headerText="Estado" style="font-weight: bolder">
+                                            <h:outputText value="#{varConcursos.estado ? 'Activo' : 'Inactivo'}"/>
+                                        </p:column>
+                                        <p:column headerText="Fecha Limite Inscripciones" style="font-weight: bolder">
+                                            <h:outputText value="#{varConcursos.fecha_limite_insc}"/>
+                                        </p:column>
+                                    </p:dataTable> 
+                                </h:panelGrid>
+                            </p:fieldset>                                 
+                                
+                                
+                            <p:dialog  width="60%" height="60%" widgetVar="dlg" header="Actividades" resizable="false"    
+                                       styleClass="for-update" 
+                                          > 
+
+                                <p:ajax event="close" update="avisoConcurso" listener="#{concursoBean.handleClose}" />
+
+                                <p:scrollPanel style="width:auto;height:600px">
+                                <h:panelGrid columns="6" cellpadding="5" style="width:auto; font-size: 90%;">
+                                        Nombre Actividad
+                                        <p:inputText value="#{concursoBean.actividad.nombre}" />
+                                        Observaciones
+                                        <p:inputTextarea value="#{concursoBean.actividad.observacion}" cols="50"/>
+                                        Fecha Limite
+                                        <p:calendar value="#{concursoBean.actividad.fechaLimite}" pattern="dd-mm-yyyy" />
+                                        
+                                        <p:commandButton icon="ui-icon-newwin" update="actividadesConcurso"  oncomplete="PF('dlg').show();" onclick="PF('dlg').show();"
+                                                type="submit" value="Generar"  actionListener="#{concursoBean.crearActividad()}"/>
+                                </h:panelGrid>
+                                        <h:panelGrid width="100%">
+                                        <p:column >
+                                                <p:dataTable id="actividadesConcurso" var="varActividades" value="#{concursoBean.listActividadess}"
+                                                                         rowStyleClass="letra-xx-small-centro" style="font-size: 10px;width: auto">
+                                                        <p:column headerText="Nombre">
+                                                                <h:outputText value="#{varActividades.nombre}"/>
+                                                        </p:column>                                        
+                                                        <p:column headerText="Observaciones">
+                                                                <h:outputText value="#{varActividades.observacion}"/>
+                                                        </p:column>
+                                                        <p:column headerText="Fecha Limite">
+                                                                <h:outputText value="#{varActividades.fechaLimite}"/>
+                                                        </p:column>
+                                                </p:dataTable>
+                                        </p:column>
+                                </h:panelGrid>
+                                </p:scrollPanel>
+                            </p:dialog>
+                            
+                           </td>
+                        </tr> 
+                    </table>  
+                    </h:panelGroup>
+                </p:panel>                                                
+            </h:form>
+                
+        </ui:composition>
+    </h:body>
+</html>
+

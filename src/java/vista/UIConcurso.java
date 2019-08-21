@@ -265,8 +265,6 @@ public class UIConcurso implements Serializable {
      public void subirItemActividadAdjuntosJueces() {    
         try {
             calificacionActividad= (CalificacionActividad) UtilJSF.getBean("varCalificaciones");                     
-            this.cargarAdjuntos();
-        
         } catch (Exception e) {
         }
         
@@ -636,7 +634,7 @@ public class UIConcurso implements Serializable {
             }
             this.getListGruposParticipantes();
         } catch (Exception ex) {
-        Logger.getLogger(UIIncapacidad.class.getName()).log(Level.SEVERE, null, ex);
+        Logger.getLogger(UIConcurso.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
     

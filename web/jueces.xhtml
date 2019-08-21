@@ -83,7 +83,7 @@ and open the template in the editor.
                                     <p:column width="6%" headerText="Ver Adjuntos">                                        
                                         <p:commandButton id="openDialogLink"  icon="ui-icon-clipboard" value="ver Adjuntos" onclick="PF('dlg3').show();" 
                                                                  oncomplete="PF('dlg3').show();"   >
-                                                    <p:ajax update="@(.dlgAdjuntosJueces)" listener="#{concursoBean.subirItemActividadAdjuntosJueces()}"/>
+                                            <p:ajax update="@(.dlgAdjuntosJueces)" listener="#{concursoBean.subirItemActividadAdjuntosJueces()}"/>
                                         </p:commandButton>
                                     </p:column>
                                     
@@ -123,47 +123,22 @@ and open the template in the editor.
                                       <p:columnGroup type="header">  
                                           <p:row>  
                                               <p:column  headerText="Opciones"  width="15%"/>
-                                              <p:column headerText="Categoria" filterBy="#{varEvaluacionAdjunto.adjuntosCategoria.nombre}" sortBy="#{varEvaluacionAdjunto.adjuntosCategoria.nombre}"/>
-                                              <p:column headerText="Tipo" filterBy="#{varEvaluacionAdjunto.adjuntosCategoria.adjuntosCategoriaTipo.nombre}" sortBy="#{varEvaluacionAdjunto.adjuntosCategoria.adjuntosCategoriaTipo.nombre}"
-                                                        width="15%"/>
-                                              <p:column headerText="Responsable" filterBy="#{varEvaluacionAdjunto.responsable.nombresApellidos}" />
-                                              <p:column  headerText="Descripción"/>
-                                              <p:column  headerText="Fecha" sortBy="#{varEvaluacionAdjunto.fecha}"/>
-                                              <p:column  headerText="Archivo" sortBy="#{varEvaluacionAdjunto.archivo}" width="7%"/>
-                                              <p:column  headerText="Ver" sortBy="#{varEvaluacionAdjunto.version}" width="4%"/>
-                                              <p:column  headerText="Vigencia" sortBy="#{varEvaluacionAdjunto.mesesVigencia}" width="7%"/>
-                                              <p:column  headerText="Fecha Fin Vigencia" sortBy="#{varEvaluacionAdjunto.fechaFinVigencia}"/>
+                                              <p:column headerText="Nombre" filterBy="#{varEvaluacionAdjunto.adjuntosCategoria.nombre}" sortBy="#{varEvaluacionAdjunto.adjuntosCategoria.nombre}"/>
+                                              
                                           </p:row> 
                                       </p:columnGroup>
 
                                       <p:column>
-                                          <p:panelGrid columns="3">
-                                              <p:commandButton icon="ui-icon-pencil" title="Modificar Adjunto" action="#{uiEvaluacionAdjuntos.modificarAdjunto()}" update="formSeccionDetalleItems:opAdjunto"/>
+                                          <p:panelGrid columns="3">                                              
                                               <p:commandButton icon="ui-icon-arrowthick-1-s" title="Ver Adjunto" ajax="false">
                                                   <p:fileDownload value="#{uiEvaluacionAdjuntos.fileDownload}" />
-                                              </p:commandButton>
-                                              <p:commandButton icon="ui-icon-trash" title="Eliminar Adjunto" action="#{uiEvaluacionAdjuntos.eliminarAdjunto()}" update="formSeccionDetalleItems:opAdjunto">
-                                                  <p:confirm header="Eliminar Soporte" message="Desea eliminar el soporte?" icon="ui-icon-alert" />
-                                              </p:commandButton>
+                                              </p:commandButton>                                              
                                           </p:panelGrid>
                                       </p:column>
                                       <p:column>
                                           <h:outputText value="#{varEvaluacionAdjunto.adjuntosCategoria.nombre}"/>
                                       </p:column>
-                                      <p:column>
-                                          <h:outputText value="#{varEvaluacionAdjunto.adjuntosCategoria.adjuntosCategoriaTipo.nombre}"/>
-                                      </p:column>
-                                      <p:column>
-                                          <h:outputText value="#{varEvaluacionAdjunto.responsable.nombresApellidos}"/>
-                                      </p:column>
-                                      <p:column>
-                                          <h:outputText value="#{varEvaluacionAdjunto.descripcion}"/>
-                                      </p:column>
-                                      <p:column>
-                                          <h:outputText value="#{varEvaluacionAdjunto.fecha}">
-                                              <f:convertDateTime pattern="dd/MM/yyyy" />
-                                          </h:outputText>
-                                      </p:column>
+                                      
                                       <p:column>
                                           <p:panelGrid columns="2" style="border: none" rendered="#{not empty varEvaluacionAdjunto.archivo}">
                                               <h:outputLabel class="ui-icon ui-icon-document" title="#{varEvaluacionAdjunto.archivoSimple}"/>

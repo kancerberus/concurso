@@ -126,7 +126,7 @@ public class UIListas implements Serializable {
                     }                        
                 }
             catch (Exception ex) {
-                        Logger.getLogger(UIEmpleado.class.getName()).log(Level.SEVERE, null, ex);
+                        Logger.getLogger(UIListas.class.getName()).log(Level.SEVERE, null, ex);
                 }
             
                 return itemsEpss;    
@@ -144,7 +144,7 @@ public class UIListas implements Serializable {
                     }                        
                 }
             catch (Exception ex) {
-                        Logger.getLogger(UIEmpleado.class.getName()).log(Level.SEVERE, null, ex);
+                        Logger.getLogger(UIListas.class.getName()).log(Level.SEVERE, null, ex);
                 }
             
                 return itemsCargos;    
@@ -162,7 +162,7 @@ public class UIListas implements Serializable {
                     }                        
                 }
             catch (Exception ex) {
-                        Logger.getLogger(UIEmpleado.class.getName()).log(Level.SEVERE, null, ex);
+                        Logger.getLogger(UIListas.class.getName()).log(Level.SEVERE, null, ex);
                 }
             
                 return itemsMeses;    
@@ -180,7 +180,7 @@ public class UIListas implements Serializable {
                     }                        
                 }
             catch (Exception ex) {
-                        Logger.getLogger(UIEmpleado.class.getName()).log(Level.SEVERE, null, ex);
+                        Logger.getLogger(UIListas.class.getName()).log(Level.SEVERE, null, ex);
                 }
             
                 return itemsMeses;    
@@ -200,7 +200,7 @@ public class UIListas implements Serializable {
                     }                        
                 }
             catch (Exception ex) {
-                        Logger.getLogger(UIEmpleado.class.getName()).log(Level.SEVERE, null, ex);
+                        Logger.getLogger(UIListas.class.getName()).log(Level.SEVERE, null, ex);
                 }
             
                 return itemsEciviles;    
@@ -218,7 +218,7 @@ public class UIListas implements Serializable {
                     }                        
                 }
             catch (Exception ex) {
-                        Logger.getLogger(UIEmpleado.class.getName()).log(Level.SEVERE, null, ex);
+                        Logger.getLogger(UIListas.class.getName()).log(Level.SEVERE, null, ex);
                 }
             
                 return itemsSexos;    
@@ -236,7 +236,7 @@ public class UIListas implements Serializable {
                 }                        
             }
         catch (Exception ex) {
-                    Logger.getLogger(UIEmpleado.class.getName()).log(Level.SEVERE, null, ex);
+                    Logger.getLogger(UIListas.class.getName()).log(Level.SEVERE, null, ex);
             }
 
             return itemsTipoIncapacidades;    
@@ -254,7 +254,7 @@ public class UIListas implements Serializable {
                 }                        
             }
         catch (Exception ex) {
-                    Logger.getLogger(UIEmpleado.class.getName()).log(Level.SEVERE, null, ex);
+                    Logger.getLogger(UIListas.class.getName()).log(Level.SEVERE, null, ex);
             }
 
             return itemsTipoEventos;    
@@ -272,7 +272,7 @@ public class UIListas implements Serializable {
                 }                        
             }
         catch (Exception ex) {
-                    Logger.getLogger(UIEmpleado.class.getName()).log(Level.SEVERE, null, ex);
+                    Logger.getLogger(UIListas.class.getName()).log(Level.SEVERE, null, ex);
             }
 
             return itemsClasificaciones;    
@@ -290,7 +290,7 @@ public class UIListas implements Serializable {
                 }                        
             }
         catch (Exception ex) {
-                    Logger.getLogger(UIEmpleado.class.getName()).log(Level.SEVERE, null, ex);
+                    Logger.getLogger(UIListas.class.getName()).log(Level.SEVERE, null, ex);
             }
 
             return itemsIncapacidadesSi;    
@@ -308,7 +308,7 @@ public class UIListas implements Serializable {
                 }                        
             }
         catch (Exception ex) {
-                    Logger.getLogger(UIEmpleado.class.getName()).log(Level.SEVERE, null, ex);
+                    Logger.getLogger(UIListas.class.getName()).log(Level.SEVERE, null, ex);
             }
 
             return itemsTipoAccidente;    
@@ -326,7 +326,7 @@ public class UIListas implements Serializable {
                 }                        
             }
         catch (Exception ex) {
-                    Logger.getLogger(UIEmpleado.class.getName()).log(Level.SEVERE, null, ex);
+                    Logger.getLogger(UIListas.class.getName()).log(Level.SEVERE, null, ex);
             }
             return itemsParteAfectada;    
     }
@@ -343,7 +343,7 @@ public class UIListas implements Serializable {
                 }                        
             }
         catch (Exception ex) {
-                    Logger.getLogger(UIEmpleado.class.getName()).log(Level.SEVERE, null, ex);
+                    Logger.getLogger(UIListas.class.getName()).log(Level.SEVERE, null, ex);
             }
             return itemsTipoLesiones;    
     }
@@ -360,7 +360,7 @@ public class UIListas implements Serializable {
                 }                        
             }
         catch (Exception ex) {
-                    Logger.getLogger(UIEmpleado.class.getName()).log(Level.SEVERE, null, ex);
+                    Logger.getLogger(UIListas.class.getName()).log(Level.SEVERE, null, ex);
             }
             return itemsRiesgos;    
     }
@@ -377,7 +377,7 @@ public class UIListas implements Serializable {
                 }                        
             }
         catch (Exception ex) {
-                    Logger.getLogger(UIEmpleado.class.getName()).log(Level.SEVERE, null, ex);
+                    Logger.getLogger(UIListas.class.getName()).log(Level.SEVERE, null, ex);
             }
             return itemsMecanismos;    
     }
@@ -394,7 +394,7 @@ public class UIListas implements Serializable {
                 }                        
             }
         catch (Exception ex) {
-                    Logger.getLogger(UIEmpleado.class.getName()).log(Level.SEVERE, null, ex);
+                    Logger.getLogger(UIListas.class.getName()).log(Level.SEVERE, null, ex);
             }
             return itemsAgentesAccidente;    
     }
@@ -411,7 +411,7 @@ public class UIListas implements Serializable {
                 }                        
             }
         catch (Exception ex) {
-                    Logger.getLogger(UIEmpleado.class.getName()).log(Level.SEVERE, null, ex);
+                    Logger.getLogger(UIListas.class.getName()).log(Level.SEVERE, null, ex);
             }
             return itemsCausaBasicas;    
     }
@@ -428,7 +428,7 @@ public class UIListas implements Serializable {
                 }                        
             }
         catch (Exception ex) {
-                    Logger.getLogger(UIEmpleado.class.getName()).log(Level.SEVERE, null, ex);
+                    Logger.getLogger(UIListas.class.getName()).log(Level.SEVERE, null, ex);
             }
             return itemsCausaInmediatas;    
     }

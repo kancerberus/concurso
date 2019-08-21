@@ -13,7 +13,6 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-import modelo.Ausentismo;
 import modelo.Empleado;
 import modelo.Municipio;
 /**
@@ -107,7 +106,6 @@ public class EmpleadoDAO {
         Date fechaNac;
         Empleado em = null;
         Municipio mu = null;
-        Ausentismo au=null;  
         String cod_registro="";
         
         try {

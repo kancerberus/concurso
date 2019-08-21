@@ -7,7 +7,6 @@ package vista;
 
 
 import controlador.GestorSubempresa;
-import controlador.GestorAusentismo;
 import java.io.Serializable;
 import java.util.List;
 import java.util.logging.Level;
@@ -16,10 +15,7 @@ import javax.el.ELContext;
 import modelo.SubEmpresa;
 import javax.el.ExpressionFactory;
 import javax.faces.context.FacesContext;
-import modelo.Ausentismo;
-import modelo.Año;
 import modelo.Empresa;
-import modelo.Mes;
 import util.Utilidades;
 
 /**
@@ -31,15 +27,11 @@ public class UISubempresa implements Serializable {
     private FacesContext contextoJSF;
     private ELContext contextoEL;
     private GestorSubempresa gestorSubempresa;
-    private GestorAusentismo gestorAusentismo;
     private ExpressionFactory sube;
     private SubEmpresa SubEmpresa;
     public Utilidades util = new Utilidades();
     private ExpressionFactory ef;
     Boolean todos;
-    private Mes mes;
-    private Año ano;
-    private List<Ausentismo> listaAusentismoanomes;
     
     private double totarl=0;
     private double toteps=0;
@@ -112,12 +104,4 @@ public class UISubempresa implements Serializable {
     public void setSubEmpresa(SubEmpresa subEmpresa) {
         this.SubEmpresa = subEmpresa;
     }    
-
-    public List<Ausentismo> getListaAusentismoanomes() {
-        return listaAusentismoanomes;
-    }
-
-    public void setListaAusentismoanomes(List<Ausentismo> listaAusentismoanomes) {
-        this.listaAusentismoanomes = listaAusentismoanomes;
-    }   
 }

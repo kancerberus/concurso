@@ -5,7 +5,6 @@
  */
 package controlador;
 
-import bd.AusentismoDAO;
 import bd.EmpleadoDAO;
 import java.util.List;
 import modelo.Empleado;

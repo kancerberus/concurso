@@ -134,6 +134,16 @@ public class GestorConcurso extends Gestor implements Serializable{
         }    
     }
     
+    public Integer guardarLogo(UploadedFile file, Concurso concurso,String ruta) throws Exception {            
+        try {
+            abrirConexion();
+            ConcursoDAO concursoDAO = new ConcursoDAO(conexion);
+            return concursoDAO.guardarLogo(file, concurso, ruta);
+        } finally {
+            cerrarConexion();
+        }    
+    }
+    
     public ArrayList<Concurso> cargarConcursos() throws Exception {
         try {
                 abrirConexion();
@@ -164,7 +174,7 @@ public class GestorConcurso extends Gestor implements Serializable{
             }
     }
     
-    /*public ArrayList<CalificacionActividad> cargarListaAdjuntosCalificaciones(CalificacionActividad calificacionActividad) throws Exception {
+    public ArrayList<AdjuntosActividad> cargarListaAdjuntosCalificaciones(CalificacionActividad calificacionActividad) throws Exception {
         try {
                 abrirConexion();
                 ConcursoDAO concursoDAO = new ConcursoDAO(conexion);
@@ -172,7 +182,7 @@ public class GestorConcurso extends Gestor implements Serializable{
             } finally {
                 cerrarConexion();
             }
-    }*/
+    }
     
     public ArrayList<Concurso> listarConcursos(String nitsesion) throws Exception {
         try {

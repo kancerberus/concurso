@@ -91,11 +91,11 @@ and open the template in the editor.
                             </p:fieldset>   
                                 
                                 
-                            <p:dialog id="calificaciones" width="20%" height="60%" widgetVar="dlg2" header="Calificacion Actividad" resizable="false" >                                        
+                            <p:dialog id="calificaciones" width="auto" height="60%" widgetVar="dlg2" header="Calificacion Actividad" resizable="false" >                                        
                                 
                                 <p:ajax event="close" update="aviso" listener="#{concursoBean.handleClose}" />
                                 
-                                <h:panelGrid columns="2" >
+                                <h:panelGrid width="auto" columns="2" >
                                         <p:column width="60%">
                                             <p:outputLabel value="Calificacion: "/>                                            
                                         </p:column>
@@ -109,57 +109,35 @@ and open the template in the editor.
                                 </p:dialog>
                                 
                                 
-                                <p:dialog id="adjuntosDlg" widgetVar="dlg3" width="30%" header="Adjuntos Actividad" resizable="false" styleClass="dlgAdjuntosJueces"
-                                          >                                        
+                        <p:dialog id="adjuntosDlg" widgetVar="dlg3" width="50%" height="50%" header="Adjuntos Actividad" resizable="false" styleClass="dlgAdjuntosJueces">
                                 
                                 <p:ajax event="close" update="aviso" listener="#{concursoBean.handleClose}" />
-                                <p:panelGrid columns="1">
-                                    <p:dataTable  value="#{uiEvaluacionAdjuntos.evaluacionAdjuntosList}" var="varVerAdjuntos" emptyMessage="No tiene soportes adjuntos."
-                                                rowStyleClass="letra-xx-small-centro" widgetVar="evaluacionAdjuntosTable" rows="5" paginator="true"
+                                
+                                    <p:dataTable  value="#{concursoBean.listaAdjuntos}" var="varVerAdjuntos" emptyMessage="No tiene soportes adjuntos."
+                                                rowStyleClass="letra-xx-small-centro" widgetVar="evaluacionAdjuntosTable" rows="5" 
                                                 >
                                       <f:facet name="header">
-                                          Soportes Cargados
+                                          Evidencias Cargadas
                                       </f:facet>
                                       <p:columnGroup type="header">  
                                           <p:row>  
-                                              <p:column  headerText="Opciones"  width="15%"/>
-                                              <p:column headerText="Nombre" filterBy="#{varEvaluacionAdjunto.adjuntosCategoria.nombre}" sortBy="#{varEvaluacionAdjunto.adjuntosCategoria.nombre}"/>
-                                              
+                                              <p:column  headerText="Opciones"/>
+                                              <p:column headerText="Nombre" filterBy="#{varVerAdjuntos.nombre}" sortBy="#{varVerAdjuntos.nombre}"/>                                              
                                           </p:row> 
                                       </p:columnGroup>
 
-                                      <p:column>
-                                          <p:panelGrid columns="3">                                              
-                                              <p:commandButton icon="ui-icon-arrowthick-1-s" title="Ver Adjunto" ajax="false">
-                                                  <p:fileDownload value="#{uiEvaluacionAdjuntos.fileDownload}" />
-                                              </p:commandButton>                                              
-                                          </p:panelGrid>
+                                      <p:column>                                                                                        
+                                              <p:commandButton icon=" ui-icon-circle-arrow-s" title="Ver Adjunto" ajax="false">
+                                                  <p:fileDownload value="#{concursoBean.fileDownload}" />
+                                              </p:commandButton>                                                                                        
                                       </p:column>
                                       <p:column>
-                                          <h:outputText value="#{varEvaluacionAdjunto.adjuntosCategoria.nombre}"/>
-                                      </p:column>
+                                          <h:outputText value="#{varVerAdjuntos.nombre}"/>
+                                      </p:column>                                     
                                       
-                                      <p:column>
-                                          <p:panelGrid columns="2" style="border: none" rendered="#{not empty varEvaluacionAdjunto.archivo}">
-                                              <h:outputLabel class="ui-icon ui-icon-document" title="#{varEvaluacionAdjunto.archivoSimple}"/>
-                                              <h:outputText value="#{varEvaluacionAdjunto.archivoSimple}" title="#{varEvaluacionAdjunto.archivoSimple}"/>
-                                          </p:panelGrid>
-                                      </p:column>
-                                      <p:column>
-                                          <h:outputText value="#{varEvaluacionAdjunto.version}"/>
-                                      </p:column>
-                                      <p:column>
-                                          <h:outputText value="#{varEvaluacionAdjunto.mesesVigencia} #{varEvaluacionAdjunto.mesesVigencia eq 1?' Mes':' Meses'}"/>
-                                      </p:column>
-                                      <p:column>
-                                          <h:outputText value="#{varEvaluacionAdjunto.fechaFinVigencia}">
-                                              <f:convertDateTime pattern="dd/MM/yyyy" />
-                                          </h:outputText>
-                                      </p:column>
-
                                   </p:dataTable>
-                                    
-                                </p:panelGrid>
+                                
+                                
                                 </p:dialog>
                            
                            

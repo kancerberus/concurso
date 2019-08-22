@@ -175,6 +175,28 @@ public class ConcursoDAO {
         }
     }
     
+    
+    public Integer guardarLogo(UploadedFile file, Concurso concurso, String ruta) throws SQLException {
+        Consulta consulta = null;        
+        Integer resultado;
+        
+        try {
+            consulta = new Consulta(getConexion());                
+            
+            //Sentencia SQL para guardar el registro
+                String sql = " UPDATE campaña.concurso "
+                        + " set ( logo='"+file.getFileName()+"', direcc_logo='' )"
+                        + " where cod_concurso='"+concurso.getCodConcurso()+"'";
+
+            resultado = consulta.actualizar(sql);
+            return resultado;
+        } catch (SQLException ex) {
+            throw ex;
+        } finally {
+            consulta.desconectar();
+        }
+    }
+    
     public Integer contarArchivos(Actividad actividad) throws SQLException {
         Consulta consulta = null;        
         ResultSet rs;

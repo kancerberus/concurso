@@ -45,7 +45,7 @@ and open the template in the editor.
                             <p:fieldset legend="Crear Concurso" style="margin-bottom:10px; margin-top:10px; width:auto" >                                       
                                 <h:panelGrid columns="4" cellpadding="5" style="width:auto; font-size: 90%;">
                                 
-                                    Empresa:<p:selectOneMenu value="#{concursoBean.empresa.nitempresa}" id="empresas">}
+                                    Empresa:<p:selectOneMenu value="#{concursoBean.empresa.nitempresa}" id="empresas">
                                     <f:selectItem itemLabel="Seleccione..." itemValue="" />                                                
                                     <f:selectItems   value="#{listasBean.itemsEmpresas}"/>                                      
                                     </p:selectOneMenu>
@@ -59,9 +59,12 @@ and open the template in the editor.
                                         <p:ajax update="avisoConcurso" listener="#{concursoBean.addMessage()}" />
                                     </p:selectBooleanCheckbox>
                                     Fecha Limite Inscripcion
-                                    <p:calendar value="#{concursoBean.concurso.fecha_limite_insc}"/>
+                                    <p:calendar value="#{concursoBean.concurso.fecha_limite_insc}" />
+                                    Logo         
+                                    <p:fileUpload fileUploadListener="#{concursoBean.uploadLogo}" mode="advanced" dragDropSupport="false"
+                                                  auto="true" update="avisoConcursoup,concursos,avisoConcurso" fileLimit="1" allowTypes="/(\.|\/)(jpe?g|png)$/"/>
                                     
-                                                                        
+                                    
                                     <p:commandButton icon="ui-icon-newwin" update="avisoConcurso, concursos"
                                             type="submit" value="Generar"  actionListener="#{concursoBean.crearConcurso()}"/>
                                 </h:panelGrid>   

@@ -134,6 +134,16 @@ public class GestorConcurso extends Gestor implements Serializable{
         }    
     }
     
+    public Integer guardarLogo(UploadedFile file, Concurso concurso,String ruta) throws Exception {            
+        try {
+            abrirConexion();
+            ConcursoDAO concursoDAO = new ConcursoDAO(conexion);
+            return concursoDAO.guardarLogo(file, concurso, ruta);
+        } finally {
+            cerrarConexion();
+        }    
+    }
+    
     public ArrayList<Concurso> cargarConcursos() throws Exception {
         try {
                 abrirConexion();

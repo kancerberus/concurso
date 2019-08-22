@@ -146,14 +146,7 @@ public class UIConcurso implements Serializable {
                     Long codConcurso=gestorConcurso.nextval(GestorConcurso.CAMPAÑA_CONCURSO_COD_CONCURSO_SEQ);
                     concurso.setCodConcurso(codConcurso.toString());
                     Integer resultado = gestorConcurso.guardarConcurso(concurso);
-                    carpeta=new File("C:/Concursos");
-                    carpeta.mkdir();
                     
-                    carpeta=new File("C:/Concursos/"+concurso.getEmpresa().getNitempresa());
-                    carpeta.mkdir();
-                    
-                    carpeta=new File("C:/Concursos/"+concurso.getEmpresa().getNitempresa()+"/"+concurso.getNombre());
-                    carpeta.mkdir();
 
                     if (resultado > 0) {
                         util.mostrarMensaje("!! Concurso guardado !!");
@@ -851,6 +844,31 @@ public class UIConcurso implements Serializable {
         } catch (Exception e) {
             Logger.getLogger(UIConcurso.class.getName()).log(Level.SEVERE, null, e);
         }
+    }
+    
+    public void uploadLogo(FileUploadEvent event) throws Exception {
+        String msg=null;
+        try {            
+            this.getConcurso();
+            gestorConcurso=new GestorConcurso();
+            
+            String ruta = "C:/Concursos/"+concurso.getEmpresa().getNombre()+"/"+
+                    concurso.getNombre();
+            
+            //gestorConcurso.guardarLogo(file, concurso, ruta);
+            
+            
+            File carpeta = new File(ruta);
+            if (!carpeta.exists()) {
+                carpeta.mkdirs();
+            }
+                       
+            UtilArchivo.guardarStream(ruta + File.separator + event.getFile().getFileName(), event.getFile().getInputstream());
+            this.file = event.getFile();
+            
+        } catch (IOException ex) {            
+        }
+
     }
 
     public AdjuntosActividad getAdjActividad() {

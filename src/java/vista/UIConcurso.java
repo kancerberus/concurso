@@ -128,8 +128,7 @@ public class UIConcurso implements Serializable {
     
     public void crearConcurso() throws Exception{        
         Boolean invalido = false;
-        String msg = null;
-        File carpeta;
+        String msg = null;        
 
         //ingreso de informacion al gestor
         gestorConcurso = new GestorConcurso();
@@ -145,6 +144,14 @@ public class UIConcurso implements Serializable {
             if (invalido == false) {       
                     Long codConcurso=gestorConcurso.nextval(GestorConcurso.CAMPAÑA_CONCURSO_COD_CONCURSO_SEQ);
                     concurso.setCodConcurso(codConcurso.toString());
+                    concurso.getEmpresa().setNombre(gestorConcurso.cargarNombreEmpresa(empresa.getNitempresa()));
+                    concurso.setLogo("C:/Concursos/"+concurso.getEmpresa().getNombre()+"/"+concurso.getNombre());
+                    File carpeta = new File(concurso.getLogo());
+                    if (!carpeta.exists()) {
+                        carpeta.mkdirs();
+                    }
+                    
+                    
                     Integer resultado = gestorConcurso.guardarConcurso(concurso);
                     
 
@@ -242,7 +249,7 @@ public class UIConcurso implements Serializable {
             for(int i=0;i<getListaGruposConcursos().size();i++){
                 if(grupoConcurso.getCodGrupo().equals(listaGrupoConcursoss.get(i).getCodGrupo())){
                     grupoConcurso.setSubempresa(new SubEmpresa(listaGrupoConcursoss.get(i).getSubempresa().getNitsubempresa(),listaGrupoConcursoss.get(i).getSubempresa().getNombre() ));
-                    grupoConcurso.setConcurso(new Concurso("", "", new Empresa(listaGrupoConcursoss.get(i).getConcurso().getEmpresa().getNitempresa(), listaGrupoConcursoss.get(i).getConcurso().getEmpresa().getNombre()) , null, true,null));
+                    grupoConcurso.setConcurso(new Concurso("", "", new Empresa(listaGrupoConcursoss.get(i).getConcurso().getEmpresa().getNitempresa(), listaGrupoConcursoss.get(i).getConcurso().getEmpresa().getNombre()) , null, true,null,""));
                     grupoConcurso.setNombre(listaGrupoConcursoss.get(i).getNombre());
                 }
             }
@@ -414,6 +421,7 @@ public class UIConcurso implements Serializable {
                             concurso.setEmpresa(listaConcursoss.get(i).getEmpresa());
                             concurso.setFecha_limite_insc(listaConcursoss.get(i).getFecha_limite_insc());
                             concurso.setParticipantes(listaConcursoss.get(i).getParticipantes());                        
+                            concurso.setLogo(listaConcursoss.get(i).getLogo());
                         }
                     }
                 }
@@ -570,7 +578,7 @@ public class UIConcurso implements Serializable {
         gestorConcurso = new GestorConcurso();
 
         try {
-            actividad.setConcurso(new Concurso(concurso.getCodConcurso(), "", null, 0,false,null));
+            actividad.setConcurso(new Concurso(concurso.getCodConcurso(), "", null, 0,false,null,""));
             //verificar que todas las cajas este llenas           
             if (actividad.getNombre().equals("")) {
                 msg = "Actividad sin nombre!";

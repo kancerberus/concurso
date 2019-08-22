@@ -131,14 +131,15 @@ public class ConcursoDAO {
             
             //Sentencia SQL para guardar el registro
                 String sql = "INSERT INTO campaña.concurso ("
-                        + " cod_concurso,fk_nitempresa, nombre, participantes, estado, fecha_limite_insc) "                        
+                        + " cod_concurso,fk_nitempresa, nombre, participantes, estado, fecha_limite_insc, logo) "                        
                         + "VALUES ("
                         + "'" + concurso.getCodConcurso() +"',"
                         + "'" + concurso.getEmpresa().getNitempresa()+ "',"
                         + "'" + concurso.getNombre() + "',"
                         + "'" + concurso.getParticipantes() + "',"
                         + "'" + concurso.isEstado() + "',"
-                        + "'" + concurso.getFecha_limite_insc() + "')";
+                        + "'" + concurso.getFecha_limite_insc() + "',"
+                        + "'" + concurso.getLogo()+"/logo.png" + "')";
 
             resultado = consulta.actualizar(sql);
             return resultado;
@@ -223,6 +224,35 @@ public class ConcursoDAO {
             consulta.desconectar();
         }
     }
+    
+    public String cargarNombreEmpresa(String nitempresa) throws SQLException {
+        Consulta consulta = null;        
+        ResultSet rs;
+        String nombre="";
+        
+        
+        try {
+            consulta = new Consulta(getConexion());                
+            
+            //Sentencia SQL para guardar el registro
+                String sql = " select nombre " +
+                            " from empresa " +
+                            " where nitempresa='"+nitempresa+"' ";
+
+            rs = consulta.ejecutar(sql);
+
+            while (rs.next()) {
+                nombre=rs.getString("nombre");
+                        
+            }
+            return nombre;
+        } catch (SQLException ex) {
+            throw ex;
+        } finally {
+            consulta.desconectar();
+        }
+    }
+    
     
     
     public Integer guardarCalificacion(CalificacionActividad calificacion) throws SQLException {
@@ -534,7 +564,7 @@ public class ConcursoDAO {
             
             consulta = new Consulta(getConexion());
             String sql
-                    = "  SELECT conc.cod_concurso, conc.nombre, conc.fk_nitempresa, participantes, estado, fecha_limite_insc  " +
+                    = "  SELECT conc.cod_concurso, conc.nombre, conc.fk_nitempresa, participantes, estado, fecha_limite_insc, logo  " +
                         " FROM campaña.concurso conc " +
                         " JOIN subempresa sub ON (sub.nitsubempresa=conc.fk_nitempresa) " +
                         " JOIN empresa emp ON(emp.nitempresa=sub.fk_nitempresa) " +
@@ -549,6 +579,7 @@ public class ConcursoDAO {
                 concurso.setParticipantes(dt.getInt("participantes"));
                 concurso.setEstado(dt.getBoolean("estado"));
                 concurso.setFecha_limite_insc(dt.getDate("fecha_limite_insc"));
+                concurso.setLogo(dt.getString("logo"));
                 concurso.setEmpresa(new Empresa(nit, ""));
                 
                 
@@ -668,7 +699,7 @@ public class ConcursoDAO {
                 actividad.setNombre(rs.getString("nomact"));
                 actividad.setObservacion(rs.getString("observacion"));
                 actividad.setFechaLimite(rs.getDate("fecha_limite"));
-                actividad.setConcurso(new Concurso(rs.getString("codcon"), rs.getString("nomcon"), null, 0, false, null));
+                actividad.setConcurso(new Concurso(rs.getString("codcon"), rs.getString("nomcon"), null, 0, false, null,""));
                 listaActividades.add(actividad);
             }
             return listaActividades;
@@ -703,7 +734,7 @@ public class ConcursoDAO {
                 actividad.setNombre(rs.getString("nomact"));
                 actividad.setObservacion(rs.getString("observacion"));
                 actividad.setFechaLimite(rs.getDate("fecha_limite"));
-                actividad.setConcurso(new Concurso(rs.getString("codcon"), rs.getString("nomcon"), null, 0, false, null));
+                actividad.setConcurso(new Concurso(rs.getString("codcon"), rs.getString("nomcon"), null, 0, false, null,""));
                 listaActividades.add(actividad);
             }
             return listaActividades;

@@ -60,10 +60,6 @@ and open the template in the editor.
                                     </p:selectBooleanCheckbox>
                                     Fecha Limite Inscripcion
                                     <p:calendar value="#{concursoBean.concurso.fecha_limite_insc}" />
-                                    Logo         
-                                    <p:fileUpload fileUploadListener="#{concursoBean.uploadLogo}" mode="advanced" dragDropSupport="false"
-                                                  auto="true" update="avisoConcursoup,concursos,avisoConcurso" fileLimit="1" allowTypes="/(\.|\/)(jpe?g|png)$/"/>
-                                    
                                     
                                     <p:commandButton icon="ui-icon-newwin" update="avisoConcurso, concursos"
                                             type="submit" value="Generar"  actionListener="#{concursoBean.crearConcurso()}"/>
@@ -90,6 +86,9 @@ and open the template in the editor.
                                         </p:column>
                                         <p:column headerText="Fecha Limite Inscripciones" style="font-weight: bolder">
                                             <h:outputText value="#{varConcursos.fecha_limite_insc}"/>
+                                        </p:column>
+                                        <p:column headerText="Logo" style="font-weight: bolder">
+                                            <p:graphicImage value="#{varConcursos.logo}" cache="false" width="40" />                                            
                                         </p:column>
                                     </p:dataTable> 
                                 </h:panelGrid>

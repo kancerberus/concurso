@@ -47,20 +47,20 @@ and open the template in the editor.
                                     <p:selectOneMenu id="subempresas" value="#{concursoBean.nitSubemrpesa}" > 
                                     <f:selectItem itemLabel="Seleccione..." itemValue="" />                                                
                                     <f:selectItems  value="#{concursoBean.listaSubEmpresas}" />                                      
-                                    <p:ajax update="gConcursos" listener="#{concursoBean.getListConcursosSubempresa}"/>
+                                    <p:ajax update="gConcursos, gEquipos,actividadesEquipo" listener="#{concursoBean.getListConcursosSubempresa}"/>
                                     </p:selectOneMenu>
                                     
                                     Concursos: *
                                     <p:selectOneMenu id="gConcursos" value="#{concursoBean.concurso.codConcurso}">
                                     <f:selectItem itemLabel="Seleccione..." itemValue="" />                                                
-                                    <f:selectItems   value="#{concursoBean.listConcursosSubempresa}" />                                      
-                                    <p:ajax update="gEquipos" listener="#{concursoBean.getListaGrupoConcurso}"/>
+                                    <f:selectItems   value="#{concursoBean.listaConcursoss}" var="con" itemLabel="#{con.nombre}" itemValue="#{con.codConcurso}" />
+                                    <p:ajax update="gEquipos,actividadesEquipo" listener="#{concursoBean.getListaGrupoConcurso}"/>
                                     </p:selectOneMenu>
                                     
                                     Equipos: *
                                     <p:selectOneMenu id="gEquipos" value="#{concursoBean.grupoConcurso.codGrupo}">
                                     <f:selectItem itemLabel="Seleccione..." itemValue="" />                                                
-                                    <f:selectItems   value="#{concursoBean.listGruposConcurso}" />                                      
+                                    <f:selectItems   value="#{concursoBean.listaGrupoConcursoss}" var="gCon" itemLabel="#{gCon.nombre}" itemValue="#{gCon.codGrupo}" />
                                     <p:ajax update="actividadesEquipo" listener="#{concursoBean.cargarCalificaciones()}"/>
                                     </p:selectOneMenu>
                                     

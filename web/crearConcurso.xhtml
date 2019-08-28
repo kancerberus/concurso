@@ -42,6 +42,7 @@ and open the template in the editor.
                                     </tr>
                                 </table>
                             </p:fieldset>
+                                
                             <p:fieldset legend="Crear Concurso" style="margin-bottom:10px; margin-top:10px; width:auto" >                                       
                                 <h:panelGrid columns="4" cellpadding="5" style="width:auto; font-size: 90%;">
                                 
@@ -64,13 +65,16 @@ and open the template in the editor.
                                     <p:commandButton icon="ui-icon-newwin" update="avisoConcurso, concursos"
                                             type="submit" value="Generar"  actionListener="#{concursoBean.crearConcurso()}"/>
                                 </h:panelGrid>   
-                                <br/>
+                                
+                                
+                            </p:fieldset> 
+                                
+                                <p:fieldset legend="CREAR ACTIVIDADES">
                                 <h:panelGrid columns="1" cellpadding="5" style="width:100%; font-size: 90%;">
                                     <p:dataTable id="concursos" var="varConcursos" value="#{concursoBean.listaConcursoss}"
                                         rowStyleClass="letra-xx-small-centro" style="font-size: 10px;width: 100%">
-                                        <p:column headerText="Opciones" style="font-weight: bolder">
-                                            <p:commandButton id="openDialogLink"  icon="ui-icon-plus" value="Crear Actividades" onclick="PF('dlg').show();"  
-                                                             update="@(.for-update)" oncomplete="PF('dlg').show();" actionListener="#{concursoBean.subirItemConcurso()}"  />
+                                        <p:column headerText="Logo" style="font-weight: bolder">
+                                            <p:graphicImage  cache="false" width="40" />                                            
                                         </p:column>                                        
                                         <p:column headerText="Empresa" style="font-weight: bolder">
                                             <h:outputText value="#{varConcursos.empresa.nombre}"/>
@@ -87,40 +91,40 @@ and open the template in the editor.
                                         <p:column headerText="Fecha Limite Inscripciones" style="font-weight: bolder">
                                             <h:outputText value="#{varConcursos.fecha_limite_insc}"/>
                                         </p:column>
-                                        <p:column headerText="Logo" style="font-weight: bolder">
-                                            <p:graphicImage value="#{varConcursos.logo}" cache="false" width="40" />                                            
-                                        </p:column>
+                                        <p:column headerText="Opciones" style="font-weight: bolder">
+                                            <p:commandButton id="openDialogLink"  icon="ui-icon-plus" value="Crear Actividades" onclick="PF('dlg').show();"  
+                                                             update="@(.for-update)" oncomplete="PF('dlg').show();" actionListener="#{concursoBean.subirItemConcurso()}"  />
+                                        </p:column>                                        
+                                        
                                     </p:dataTable> 
-                                </h:panelGrid>
-                            </p:fieldset>                                 
+                            </h:panelGrid>                                    
+                            </p:fieldset>    
                                 
                                 
-                            <p:dialog  width="auto" height="60%" widgetVar="dlg" header="Actividades" resizable="false"    
+                                
+                            <p:dialog  widgetVar="dlg" header="Actividades" resizable="false"    
                                        styleClass="for-update" 
                                           > 
 
                                 <p:ajax event="close" update="avisoConcurso" listener="#{concursoBean.handleClose}" />
 
                                 <p:scrollPanel style="width:auto;height:600px">
-                                <h:panelGrid columns="6" cellpadding="5" style="width:auto; font-size: 90%;">
+                                <h:panelGrid columns="6" cellpadding="5" style="font-size: 90%;">
                                         Nombre Actividad
                                         <p:inputText value="#{concursoBean.actividad.nombre}" />
                                         Observaciones
                                         <p:inputTextarea value="#{concursoBean.actividad.observacion}" cols="50"/>
                                         Fecha Limite
-                                        <p:calendar value="#{concursoBean.actividad.fechaLimite}" pattern="yyyy-mm-dd" />                                        
+                                        
+                                        <p:calendar id="button" value="#{concursoBean.actividad.fechaLimite}" showOn="button" />
                                         <p:commandButton icon="ui-icon-newwin" update="actividadesConcurso"  oncomplete="PF('dlg').show();" onclick="PF('dlg').show();"
                                                 type="submit" value="Generar"  actionListener="#{concursoBean.crearActividad()}"/>
-                                        <p:outputLabel/>
-                                        <p:outputLabel/>
-                                        <p:outputLabel/>
-                                        <p:outputLabel/>
-                                        <p:outputLabel  value="yyyy-MM-dd"/>
+                                        
                                 </h:panelGrid>
-                                        <h:panelGrid width="100%">
+                                    <h:panelGrid columns="1" cellpadding="5">
                                         <p:column >
-                                                <p:dataTable id="actividadesConcurso" var="varActividades" value="#{concursoBean.listActividadess}"
-                                                                         rowStyleClass="letra-xx-small-centro" style="font-size: 10px;width: auto">
+                                            <p:dataTable id="actividadesConcurso" var="varActividades" value="#{concursoBean.listActividadess}"
+                                                                         rowStyleClass="letra-xx-small-centro" style="font-size: 10px">
                                                         <p:column headerText="Nombre">
                                                                 <h:outputText value="#{varActividades.nombre}"/>
                                                         </p:column>                                        

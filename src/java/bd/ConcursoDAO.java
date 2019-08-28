@@ -5,11 +5,19 @@
  */
 package bd;
 
+import java.io.BufferedInputStream;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Collection;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import modelo.Actividad;
 import modelo.AdjuntosActividad;
 import modelo.CalificacionActividad;
@@ -19,14 +27,22 @@ import modelo.Empresa;
 import modelo.GrupoConcurso;
 import modelo.GrupoConcursoParticipantes;
 import modelo.SubEmpresa;
-import org.primefaces.component.fileupload.FileUpload;
+import org.primefaces.model.DefaultStreamedContent;
+import org.primefaces.model.StreamedContent;
 import org.primefaces.model.UploadedFile;
+import vista.UIConcurso;
 /**
  *
  * @author Andres
  */
 public class ConcursoDAO {
     private Connection conexion;
+    private InputStream logo=new InputStream() {
+        @Override
+        public int read() throws IOException {
+            throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        }
+    };
 
     public ConcursoDAO(Connection conexion) {
         this.conexion = conexion;
@@ -48,23 +64,58 @@ public class ConcursoDAO {
         this.conexion = conexion;
     }
 
-    public Integer guardarActividad(Actividad actividad) throws SQLException {
+        public Integer guardarActividad(Actividad actividad) throws SQLException {
         Consulta consulta = null;        
         Integer resultado;
-        
+        ResultSet rs;
+        ArrayList<GrupoConcurso> listaGrupoConcursos = new ArrayList<>();
+        GrupoConcurso grupoConcurso;
         try {
             consulta = new Consulta(getConexion());                
             
             //Sentencia SQL para guardar el registro
                 String sql = "INSERT INTO campaña.actividad ("
-                        + " nombre, observacion, fecha_limite, fk_cod_concurso) "                        
+                        + " cod_actividad, nombre, observacion, fecha_limite, fk_cod_concurso) "                        
                         + "VALUES ("
+                        + "'" + actividad.getCodActividad()+ "', "
                         + "'" + actividad.getNombre() + "',"
                         + "'" + actividad.getObservacion() + "',"
                         + "'" + actividad.getFechaLimite() + "',"
                         + "'" + actividad.getConcurso().getCodConcurso() + "')";
 
             resultado = consulta.actualizar(sql);
+            
+            consulta = new Consulta(getConexion());                
+            
+            //Sentencia SQL para guardar el registro
+                String sql1 = " select cod_grupo "
+                        + " from campaña.grupo_concurso "
+                        + " where cod_concurso='"+actividad.getConcurso().getCodConcurso()+"'";
+
+            rs = consulta.ejecutar(sql1);
+
+            while (rs.next()) {
+                grupoConcurso=new GrupoConcurso();
+                grupoConcurso.setCodGrupo(rs.getString("cod_grupo"));
+                listaGrupoConcursos.add(grupoConcurso);
+            }
+            
+            for(int i=0;i<listaGrupoConcursos.size();i++){
+                
+                consulta = new Consulta(getConexion());                
+            
+            //Sentencia SQL para guardar el registro
+                String sql2 = "INSERT INTO campaña.calificacion_actividad ("
+                        + " cod_grupo, cod_actividad, calificacion) "                        
+                        + "VALUES ("
+                        + "'" + listaGrupoConcursos.get(i).getCodGrupo() + "',"
+                        + "'" + actividad.getCodActividad() + "', "
+                        + "'0' )";
+                
+            resultado = consulta.actualizar(sql2);
+            }
+            
+            
             return resultado;
         } catch (SQLException ex) {
             throw ex;
@@ -370,7 +421,7 @@ public class ConcursoDAO {
         try {
             consulta = new Consulta(getConexion());
             String sql
-                    = " SELECT cod_concurso, conc.nombre nomconc, em.nombre nombre,fk_nitempresa, participantes, estado, fecha_limite_insc " +
+                    = " SELECT cod_concurso, conc.nombre nomconc, em.nombre nombre,fk_nitempresa, participantes, estado, fecha_limite_insc, conc.logo logo " +
                         "FROM campaña.concurso conc " +
                         "JOIN empresa em on(em.nitempresa=conc.fk_nitempresa) " +
                         "ORDER BY cod_concurso";
@@ -382,9 +433,18 @@ public class ConcursoDAO {
                 concurso.setCodConcurso(rs.getString("cod_concurso"));
                 concurso.setNombre(rs.getString("nomconc"));
                 concurso.setParticipantes(rs.getInt("participantes"));
+                concurso.setLogo(rs.getString("logo"));
                 concurso.setEstado(rs.getBoolean("estado"));
                 concurso.setFecha_limite_insc(rs.getDate("fecha_limite_insc"));
                 concurso.setEmpresa(new Empresa(rs.getString("fk_nitempresa"), rs.getString("nombre")));
+                
+                
+                ByteArrayOutputStream out=null;        
+                out=traerArchivo("C:\\Concursos\\COBIENESTAR - RIOSUCIO\\concurso1\\logo.png");
+                logo=new ByteArrayInputStream(out.toByteArray());
+                
+                concurso.setScontlogo(logo);
+                
                 listaConcursos.add(concurso);
             }
             return listaConcursos;
@@ -394,6 +454,30 @@ public class ConcursoDAO {
         } finally {
             consulta.desconectar();
         }
+    }
+    
+    public ByteArrayOutputStream traerArchivo(String ruta){
+        ByteArrayOutputStream out=null;
+        String path=ruta;
+        InputStream in=null;
+        
+        try {
+            
+            File remoteFile=new File(path);
+            in=new BufferedInputStream(new FileInputStream(remoteFile));
+            out=new  ByteArrayOutputStream((int) remoteFile.length());
+            byte[] buffer=new byte [4096];
+            int len=0;
+            
+            while ((len=in.read(buffer,0,buffer.length))!=-1){
+                out.write(buffer,0,len);
+            }
+            out.flush();
+            
+        } catch (Exception e) {
+            Logger.getLogger(UIConcurso.class.getName()).log(Level.SEVERE, null, e);
+        }
+        return out;
     }
     
     public String cargarNitEmpresa(String nitsesion) throws SQLException {
@@ -422,7 +506,7 @@ public class ConcursoDAO {
     }
     
     
-    public ArrayList<GrupoConcurso> cargarGruposConcursos(String nitsesion) throws SQLException {
+    public ArrayList<GrupoConcurso> cargarGruposConcursos(String nitsesion, String codConcurso) throws SQLException {
         GrupoConcurso  grupoConcurso;
         SubEmpresa subempresa=new SubEmpresa();
         Empresa empresa=new Empresa();
@@ -455,7 +539,7 @@ public class ConcursoDAO {
                     = " SELECT cod_grupo, gconc.cod_concurso codgconc, conc.nombre nomconc, gconc.nombre nombregconc, conc.participantes participantes " +
                         " FROM campaña.grupo_concurso gconc " +
                         " JOIN campaña.concurso conc on(conc.cod_concurso=gconc.cod_concurso) "+
-                        " WHERE conc.fk_nitempresa='"+nit+"'" +
+                        " WHERE conc.fk_nitempresa='"+nit+"' and conc.cod_concurso='"+codConcurso+"'" +
                         " ORDER BY conc.cod_concurso";
 
             rs = consulta.ejecutar(sql);
@@ -489,7 +573,7 @@ public class ConcursoDAO {
             String sql
                     = " SELECT cod_adjunto, nombre " +
                         " from campaña.adjuntos_actividad " +
-                        " where cod_actividad='"+actividad.getCodActividad()+"' ";
+                        " where cod_actividad='"+actividad.getCodActividad()+"' and cod_grupo='"+actividad.getGrupoConcurso().getCodGrupo()+"'";
 
             rs = consulta.ejecutar(sql);
 
@@ -564,7 +648,7 @@ public class ConcursoDAO {
             
             consulta = new Consulta(getConexion());
             String sql
-                    = "  SELECT conc.cod_concurso, conc.nombre, conc.fk_nitempresa, participantes, estado, fecha_limite_insc, logo  " +
+                    = "  SELECT conc.cod_concurso, conc.nombre, conc.fk_nitempresa, participantes, estado, fecha_limite_insc, logo, emp.nombre nomem  " +
                         " FROM campaña.concurso conc " +
                         " JOIN subempresa sub ON (sub.nitsubempresa=conc.fk_nitempresa) " +
                         " JOIN empresa emp ON(emp.nitempresa=sub.fk_nitempresa) " +
@@ -580,7 +664,7 @@ public class ConcursoDAO {
                 concurso.setEstado(dt.getBoolean("estado"));
                 concurso.setFecha_limite_insc(dt.getDate("fecha_limite_insc"));
                 concurso.setLogo(dt.getString("logo"));
-                concurso.setEmpresa(new Empresa(nit, ""));
+                concurso.setEmpresa(new Empresa(nit, dt.getString("nomem")));
                 
                 
                 listaConcursos.add(concurso);
@@ -595,7 +679,7 @@ public class ConcursoDAO {
     }
 
     
-    public ArrayList<GrupoConcurso> listarGruposConcursos(String codConcurso) throws SQLException {
+    public ArrayList<GrupoConcurso> listarGruposConcursos(String codConcurso, String nitsubempresa) throws SQLException {
         GrupoConcurso grupoConcurso;
         ArrayList<GrupoConcurso> listaGrupoConcursos = new ArrayList<>();
         ResultSet dt;
@@ -606,7 +690,7 @@ public class ConcursoDAO {
                     = "  SELECT cod_grupo, gconc.nombre, conc.nombre nomconc, conc.participantes participantes  " +
                         " FROM campaña.grupo_concurso gconc " +
                         " JOIN campaña.concurso conc on(conc.cod_concurso=gconc.cod_concurso)  " +
-                        " WHERE gconc.cod_concurso='"+codConcurso+"'  ";
+                        " WHERE gconc.cod_concurso='"+codConcurso+"' and gconc.fk_nitsubempresa='"+nitsubempresa+"'  ";
 
             dt = consulta.ejecutar(sql);
 
@@ -625,7 +709,7 @@ public class ConcursoDAO {
         } finally {
             consulta.desconectar();
         }
-    }    
+    }
 
     public ArrayList<Concurso> cargarConcursosGerente(String nitsesion) throws SQLException {
         Concurso concurso;

@@ -26,7 +26,7 @@ public class GestorConcurso extends Gestor implements Serializable{
     
     public static String CAMPAÑA_CONCURSO_COD_CONCURSO_SEQ = "campaña.campaña_concurso_cod_concurso_seq";
     public static String CAMPAÑA_GRUPO_CONCURSO_COD_GRUPO_SEQ = "campaña.campaña_grupo_concurso_cod_grupo_seq";
-    
+    public static String CAMPAÑA_ACTIIVIDAD_COD_ACTIVIDAD_SEQ = "campaña.campaña_actividad_cod_actividad_seq";
     
     private ConcursoDAO concursoDAO;
     
@@ -164,11 +164,11 @@ public class GestorConcurso extends Gestor implements Serializable{
             }
     }
     
-    public ArrayList<GrupoConcurso> cargarGruposConcursos(String nitsesion) throws Exception {
+    public ArrayList<GrupoConcurso> cargarGruposConcursos(String nitsesion, String codConcurso) throws Exception {
         try {
                 abrirConexion();
                 ConcursoDAO concursoDAO = new ConcursoDAO(conexion);
-                return concursoDAO.cargarGruposConcursos(nitsesion);
+                return concursoDAO.cargarGruposConcursos(nitsesion, codConcurso);
             } finally {
                 cerrarConexion();
             }
@@ -204,11 +204,11 @@ public class GestorConcurso extends Gestor implements Serializable{
         }        
     }
     
-    public ArrayList<GrupoConcurso> listarGrupoConcursos(String codConcurso) throws Exception {
+    public ArrayList<GrupoConcurso> listarGrupoConcursos(String codConcurso, String nitsubempresa) throws Exception {
         try {
             abrirConexion();
             ConcursoDAO concursoDAO = new ConcursoDAO(conexion);
-            return concursoDAO.listarGruposConcursos(codConcurso);
+            return concursoDAO.listarGruposConcursos(codConcurso, nitsubempresa);
         } finally {
             cerrarConexion();
         }        

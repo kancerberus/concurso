@@ -5,8 +5,10 @@
  */
 package modelo;
 
+import java.io.InputStream;
 import java.io.Serializable;
 import java.util.Date;
+import org.primefaces.model.StreamedContent;
 
 /**
  *
@@ -23,6 +25,7 @@ public class Concurso implements Serializable{
     private boolean estado=true;
     private Date fecha_limite_insc;
     private String logo;
+    private InputStream scontlogo;
 
     public Concurso(String codConcurso, String nombre, Empresa empresa, Integer participantes, boolean estado, Date fecha_limite_insc, String logo) {
         this.codConcurso = codConcurso;
@@ -45,6 +48,14 @@ public class Concurso implements Serializable{
     public Concurso() {
 
     }  
+
+    public InputStream getScontlogo() {
+        return scontlogo;
+    }
+
+    public void setScontlogo(InputStream scontlogo) {
+        this.scontlogo = scontlogo;
+    }
 
     public boolean isEstado() {
         return estado;

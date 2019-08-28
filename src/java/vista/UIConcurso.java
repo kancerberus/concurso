@@ -9,6 +9,9 @@ package vista;
 import bd.UtilJSF;
 import controlador.GestorConcurso;
 import controlador.GestorEmpleado;
+import java.io.BufferedInputStream;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -37,13 +40,11 @@ import modelo.Empresa;
 import modelo.GrupoConcurso;
 import modelo.GrupoConcursoParticipantes;
 import modelo.SubEmpresa;
-import org.primefaces.context.RequestContext;
 import org.primefaces.event.CloseEvent;
 import org.primefaces.event.FileUploadEvent;
 import org.primefaces.model.DefaultStreamedContent;
 import org.primefaces.model.StreamedContent;
 import org.primefaces.model.UploadedFile;
-import util.Dialogo;
 import util.UtilArchivo;
 
 
@@ -109,6 +110,7 @@ public class UIConcurso implements Serializable {
        listaConcursosEmpresas=new ArrayList<>();
        contextoJSF = FacesContext.getCurrentInstance();
        contextoEL = contextoJSF.getELContext(); 
+       nitSubemrpesa="";
        this.limpiarActividad();
        
     }  
@@ -123,7 +125,8 @@ public class UIConcurso implements Serializable {
         }
     }
     
-    public void handleClose(CloseEvent event) {                
+    public void handleClose(CloseEvent event) throws Exception {                
+        this.getListaConcurso();
     }     
     
     public void crearConcurso() throws Exception{        
@@ -374,7 +377,7 @@ public class UIConcurso implements Serializable {
     
     public ArrayList<SelectItem> getListaConcurso() throws Exception{    
         try {
-            
+            concurso=new Concurso();
             listaConcurso=new ArrayList<>();
             gestorConcurso=new GestorConcurso();
             listaConcursoss=new ArrayList<>();
@@ -396,7 +399,7 @@ public class UIConcurso implements Serializable {
     public ArrayList<SelectItem> getListaGruposConcursos() throws Exception{
         
         try {
-            
+            grupoConcurso=new GrupoConcurso();
             listaGruposConcursos=new ArrayList<>();
             gestorConcurso=new GestorConcurso();            
             
@@ -405,7 +408,7 @@ public class UIConcurso implements Serializable {
             ef = contextoJSF.getApplication().getExpressionFactory();
             String nitsesion = (String) ef.createValueExpression(contextoEL, "#{loginBean.sesion.usuario.subEmpresa.nitsubempresa}", String.class).getValue(contextoEL);  
             listaGrupoConcursoss=new ArrayList<>();
-            listaGrupoConcursoss=gestorConcurso.cargarGruposConcursos(nitsesion);           
+            listaGrupoConcursoss=gestorConcurso.cargarGruposConcursos(nitsesion, concurso.getCodConcurso());           
             
             listaGruposConcursos.clear();
             
@@ -414,7 +417,7 @@ public class UIConcurso implements Serializable {
                     }
             
                 if(concurso.getCodConcurso()!=null){
-                    for(int i=0;i<listaConcurso.size();i++){
+                    for(int i=0;i<=listaConcurso.size();i++){
                         if(concurso.getCodConcurso().equals(listaConcursoss.get(i).getCodConcurso())){                    
                             concurso.setNombre(listaConcursoss.get(i).getNombre());                        
                             concurso.setCodConcurso(listaConcursoss.get(i).getCodConcurso());
@@ -468,7 +471,7 @@ public class UIConcurso implements Serializable {
     
     public ArrayList<SelectItem> getListActividades() throws Exception{
         try {
-            
+            actividad=new Actividad();
             this.limpiarActividad();
             gestorConcurso=new GestorConcurso();     
             listActividadess=new ArrayList<>();
@@ -590,7 +593,10 @@ public class UIConcurso implements Serializable {
             }
          
 
-            if (invalido == false) {                                    
+            if (invalido == false) {   
+                    Long codActividad=gestorConcurso.nextval(GestorConcurso.CAMPAÑA_ACTIIVIDAD_COD_ACTIVIDAD_SEQ);
+                    actividad.setCodActividad(codActividad.toString());
+                    
                     Integer resultado = gestorConcurso.guardarActividad(actividad);
                     this.getListActividades();
                     if (resultado > 0) {
@@ -641,7 +647,8 @@ public class UIConcurso implements Serializable {
     public ArrayList<SelectItem> getListaConcursosEmpresas() throws Exception{
             
             try {
-                
+                concurso=new Concurso();
+                listActividadess=new ArrayList<>();
                 gestorConcurso = new GestorConcurso();
                 contextoJSF = FacesContext.getCurrentInstance();
                 contextoEL = contextoJSF.getELContext();
@@ -702,6 +709,9 @@ public class UIConcurso implements Serializable {
     
     public ArrayList<SelectItem> getListaSubEmpresas() throws Exception{
         try {
+            listCalificacionesActividad=new ArrayList<>();
+            calificacionActividad=new CalificacionActividad();
+            nitSubemrpesa="";
             contextoJSF = FacesContext.getCurrentInstance();
             contextoEL = contextoJSF.getELContext();
             ef = contextoJSF.getApplication().getExpressionFactory();
@@ -730,6 +740,7 @@ public class UIConcurso implements Serializable {
     public ArrayList<SelectItem> getListaGrupoConcurso() throws Exception{
             
             try {
+                grupoConcurso=new GrupoConcurso();
                 this.listActividades= new ArrayList<>();
                 gestorConcurso = new GestorConcurso();
                 contextoJSF = FacesContext.getCurrentInstance();
@@ -737,7 +748,7 @@ public class UIConcurso implements Serializable {
                 ef = contextoJSF.getApplication().getExpressionFactory();                
                 
                 listaGrupoConcursoss=new ArrayList<>();                
-                listaGrupoConcursoss = gestorConcurso.listarGrupoConcursos(concurso.getCodConcurso());
+                listaGrupoConcursoss = gestorConcurso.listarGrupoConcursos(concurso.getCodConcurso(), nitSubemrpesa);
                 listGruposConcurso.clear();
                 for (int i = 0; i < listaGrupoConcursoss.size(); i++) {                    
                         listGruposConcurso.add(new SelectItem(listaGrupoConcursoss.get(i).getCodGrupo(), listaGrupoConcursoss.get(i).getNombre()));
@@ -798,6 +809,8 @@ public class UIConcurso implements Serializable {
 
     public ArrayList<SelectItem> getListConcursosSubempresa() {
         try {                
+                concurso=new Concurso();
+                grupoConcurso=new GrupoConcurso();
                 gestorConcurso = new GestorConcurso();
                 contextoJSF = FacesContext.getCurrentInstance();
                 contextoEL = contextoJSF.getELContext();
@@ -877,6 +890,39 @@ public class UIConcurso implements Serializable {
         } catch (IOException ex) {            
         }
 
+    }
+    
+    public StreamedContent mostrarImagen(String nom){        
+        ByteArrayOutputStream out=null;        
+        InputStream logo=null;
+                
+        out=traerArchivo(nom);
+        logo=new ByteArrayInputStream(out.toByteArray());
+        return new DefaultStreamedContent(logo);        
+    }
+    
+    public ByteArrayOutputStream traerArchivo(String ruta){
+        ByteArrayOutputStream out=null;
+        String path=ruta;
+        InputStream in=null;
+        
+        try {
+            
+            File remoteFile=new File(path);
+            in=new BufferedInputStream(new FileInputStream(remoteFile));
+            out=new  ByteArrayOutputStream((int) remoteFile.length());
+            byte[] buffer=new byte [4096];
+            int len=0;
+            
+            while ((len=in.read(buffer,0,buffer.length))!=-1){
+                out.write(buffer,0,len);
+            }
+            out.flush();
+            
+        } catch (Exception e) {
+            Logger.getLogger(UIConcurso.class.getName()).log(Level.SEVERE, null, e);
+        }
+        return out;
     }
 
     public AdjuntosActividad getAdjActividad() {

@@ -46,33 +46,35 @@ and open the template in the editor.
                                     <p:selectOneMenu value="#{concursoBean.concurso.codConcurso}">
                                     <f:selectItem itemLabel="Seleccione..." itemValue="" />                                                
                                     <f:selectItems   value="#{concursoBean.listaConcursosEmpresas}"/>                                      
-                                    <p:ajax listener="#{concursoBean.getListaGrupoConcurso}" update="gruposConcurso"/>
+                                    <p:ajax listener="#{concursoBean.getListaGruposConcursos}" update="fieldParticipantes,gruposConcurso"/>
                                     </p:selectOneMenu>
                                     Nombre Equipo
                                     <p:inputText value="#{concursoBean.grupoConcurso.nombre}" />                                                        
-                                    <p:commandButton icon="ui-icon-newwin" update="gruposConcurso"  
+                                    <p:commandButton icon="ui-icon-newwin" update="fieldParticipantes,gruposConcurso"  
                                                  type="submit" value="Crear Equipo"  actionListener="#{concursoBean.crearGrupoConcurso()}"/>
                                     
-                                    </h:panelGrid>
-                                    <br/>
-                                    <h:panelGrid width="100%">
+                                    </h:panelGrid>                                    
+                                </p:fieldset>
+                                
+                                <p:fieldset id="fieldParticipantes" legend="AGREGAR PARTICIPANTES">
+                                    
                                         <p:column >
                                             <p:dataTable id="gruposConcurso" var="varEquipos" value="#{concursoBean.listaGrupoConcursoss}"
-                                                         rowStyleClass="letra-xx-small-centro" style="font-size: 10px;width: 100%">                                    
-                                                <p:column headerText="Opciones">
-                                                    <p:commandButton id="openDialogLink"  icon="ui-icon-plus" value="Crear Participantes" onclick="PF('dlg').show();" 
-                                                                     oncomplete="PF('dlg').show();" actionListener="#{concursoBean.subirItemGrupoConcurso()}"  update="@(.for-update)"/>
-                                                </p:column>                                                                                            
-                                                <p:column headerText="Nombre">
+                                                         rowStyleClass="letra-xx-small-centro" style="font-size: 10px;width: 100%">                                                                                    
+                                                <p:column headerText="Nombre Equipo">
                                                     <h:outputText value="#{varEquipos.nombre}"/>
                                                 </p:column>
                                                 <p:column headerText="Concurso">
                                                     <h:outputText value="#{varEquipos.concurso.nombre}"/>
                                                 </p:column>
+                                                <p:column width="15%" headerText="Opciones">
+                                                    <p:commandButton id="openDialogLink"  icon="ui-icon-plus" value="Crear Participantes" onclick="PF('dlg').show();" 
+                                                                     oncomplete="PF('dlg').show();" actionListener="#{concursoBean.subirItemGrupoConcurso()}"  update="@(.for-update)"/>
+                                                </p:column>                                                                                            
                                             </p:dataTable>
                                         </p:column>
-                                </h:panelGrid>
-                            </p:fieldset>
+                                
+                                </p:fieldset>
                                 
                             <p:dialog id="picture" width="70%" height="60%" widgetVar="dlg" header="Participantes" resizable="false" styleClass="for-update" 
                                       >                                                                        

@@ -435,9 +435,8 @@ public class ConcursoDAO {
                 concurso.setParticipantes(rs.getInt("participantes"));
                 concurso.setEstado(rs.getBoolean("estado"));
                 concurso.setFecha_limite_insc(rs.getDate("fecha_limite_insc"));
-                concurso.setEmpresa(new Empresa(rs.getString("fk_nitempresa"), rs.getString("nombre")));
-                /*concurso.setl
-                listaConcursos.add(concurso);*/
+                concurso.setEmpresa(new Empresa(rs.getString("fk_nitempresa"), rs.getString("nombre")));                
+                listaConcursos.add(concurso);
             }
             return listaConcursos;
 

@@ -421,7 +421,7 @@ public class ConcursoDAO {
         try {
             consulta = new Consulta(getConexion());
             String sql
-                    = " SELECT cod_concurso, conc.nombre nomconc, em.nombre nombre,fk_nitempresa, participantes, estado, fecha_limite_insc, conc.logo logo " +
+                    = " SELECT cod_concurso, conc.nombre nomconc, em.nombre nombre,fk_nitempresa, participantes, estado, fecha_limite_insc, logo " +
                         "FROM campaña.concurso conc " +
                         "JOIN empresa em on(em.nitempresa=conc.fk_nitempresa) " +
                         "ORDER BY cod_concurso";
@@ -433,17 +433,12 @@ public class ConcursoDAO {
                 concurso.setCodConcurso(rs.getString("cod_concurso"));
                 concurso.setNombre(rs.getString("nomconc"));
                 concurso.setParticipantes(rs.getInt("participantes"));
-                concurso.setLogo(rs.getString("logo"));
                 concurso.setEstado(rs.getBoolean("estado"));
                 concurso.setFecha_limite_insc(rs.getDate("fecha_limite_insc"));
                 concurso.setEmpresa(new Empresa(rs.getString("fk_nitempresa"), rs.getString("nombre")));
                 
                 
-                ByteArrayOutputStream out=null;        
-                out=traerArchivo("C:\\Concursos\\COBIENESTAR - RIOSUCIO\\concurso1\\logo.png");
-                logo=new ByteArrayInputStream(out.toByteArray());
                 
-                concurso.setScontlogo(logo);
                 
                 listaConcursos.add(concurso);
             }

@@ -436,11 +436,8 @@ public class ConcursoDAO {
                 concurso.setEstado(rs.getBoolean("estado"));
                 concurso.setFecha_limite_insc(rs.getDate("fecha_limite_insc"));
                 concurso.setEmpresa(new Empresa(rs.getString("fk_nitempresa"), rs.getString("nombre")));
-                
-                
-                
-                
-                listaConcursos.add(concurso);
+                /*concurso.setl
+                listaConcursos.add(concurso);*/
             }
             return listaConcursos;
 
@@ -449,31 +446,8 @@ public class ConcursoDAO {
         } finally {
             consulta.desconectar();
         }
-    }
-    
-    public ByteArrayOutputStream traerArchivo(String ruta){
-        ByteArrayOutputStream out=null;
-        String path=ruta;
-        InputStream in=null;
-        
-        try {
-            
-            File remoteFile=new File(path);
-            in=new BufferedInputStream(new FileInputStream(remoteFile));
-            out=new  ByteArrayOutputStream((int) remoteFile.length());
-            byte[] buffer=new byte [4096];
-            int len=0;
-            
-            while ((len=in.read(buffer,0,buffer.length))!=-1){
-                out.write(buffer,0,len);
-            }
-            out.flush();
-            
-        } catch (Exception e) {
-            Logger.getLogger(UIConcurso.class.getName()).log(Level.SEVERE, null, e);
-        }
-        return out;
-    }
+    }   
+
     
     public String cargarNitEmpresa(String nitsesion) throws SQLException {
         String nitempresa="";
@@ -575,7 +549,7 @@ public class ConcursoDAO {
             while (rs.next()) {
                 adjuntosActividad=new AdjuntosActividad();
                 adjuntosActividad.setCodAdjunto(rs.getInt("cod_adjunto"));
-                adjuntosActividad.setNombre(rs.getString("nombre"));
+                adjuntosActividad.setNombre(rs.getString("nombre").trim());
                 listaAdjuntosActividad.add(adjuntosActividad);
             }
             return listaAdjuntosActividad;
@@ -605,8 +579,8 @@ public class ConcursoDAO {
             while (rs.next()) {                
                 adjActividad=new AdjuntosActividad();
                 adjActividad.setCodAdjunto(rs.getInt("cod_adjunto"));
-                adjActividad.setNombre(rs.getString("nombre"));
-                adjActividad.setDireccion(rs.getString("direccion"));
+                adjActividad.setNombre(rs.getString("nombre").trim());
+                adjActividad.setDireccion(rs.getString("direccion").trim());
                 adjActividad.setGrupoConcurso(new GrupoConcurso(rs.getString("cod_grupo"),null, null, null));
                 listaAdjuntosActividadJueces.add(adjActividad);
             }

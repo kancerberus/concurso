@@ -398,8 +398,7 @@ public class UIConcurso implements Serializable {
     
     public ArrayList<SelectItem> getListaGruposConcursos() throws Exception{
         
-        try {
-            grupoConcurso=new GrupoConcurso();
+        try {            
             listaGruposConcursos=new ArrayList<>();
             gestorConcurso=new GestorConcurso();            
             
@@ -596,7 +595,7 @@ public class UIConcurso implements Serializable {
             if (invalido == false) {   
                     Long codActividad=gestorConcurso.nextval(GestorConcurso.CAMPAÑA_ACTIIVIDAD_COD_ACTIVIDAD_SEQ);
                     actividad.setCodActividad(codActividad.toString());
-                    
+                    actividad.getNombre().trim();
                     Integer resultado = gestorConcurso.guardarActividad(actividad);
                     this.getListActividades();
                     if (resultado > 0) {
@@ -783,7 +782,7 @@ public class UIConcurso implements Serializable {
             if(contArch>=5){
                 util.mostrarMensaje("Numero de archivos permitido");
             }else{
-                UtilArchivo.guardarStream(ruta + File.separator + event.getFile().getFileName(), event.getFile().getInputstream());
+                UtilArchivo.guardarStream(ruta.trim() + File.separator + event.getFile().getFileName(), event.getFile().getInputstream());
                 this.file = event.getFile();
                 gestorConcurso.guardarDatosAdjuntos(file, actividad, ruta);
             }
@@ -853,6 +852,7 @@ public class UIConcurso implements Serializable {
             
             listaAdjuntos.addAll(gestorConcurso.cargarListaAdjuntos(actividad));
         } catch (Exception e) {
+            Logger.getLogger(UIConcurso.class.getName()).log(Level.SEVERE, null, e);
         }
     }
     

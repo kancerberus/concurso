@@ -74,7 +74,9 @@ and open the template in the editor.
                                     <p:dataTable id="concursos" var="varConcursos" value="#{concursoBean.listaConcursoss}"
                                         rowStyleClass="letra-xx-small-centro" style="font-size: 10px;width: 100%">
                                         <p:column headerText="Logo" style="font-weight: bolder">
-                                            <p:graphicImage  cache="false" width="40" />                                            
+                                            <p:graphicImage value="#{personController.getStreamedOrgImg()}" cache="false" width="100" height="25">
+                                                <f:param name="id" value="#{person.sidPerson}"/>
+                                            </p:graphicImage>
                                         </p:column>                                        
                                         <p:column headerText="Empresa" style="font-weight: bolder">
                                             <h:outputText value="#{varConcursos.empresa.nombre}"/>

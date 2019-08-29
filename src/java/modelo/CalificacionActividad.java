@@ -15,7 +15,7 @@ public class CalificacionActividad implements Serializable{
 
     private String codActividad;
     private String codGrupo;    
-    private Integer calificacion;
+    private Integer calificacion=0;
     
     private Actividad actividad;
     private GrupoConcurso grupoConcurso;

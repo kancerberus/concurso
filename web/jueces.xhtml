@@ -15,7 +15,7 @@ and open the template in the editor.
     
     <h:body>
         <ui:composition>
-            <h:form id="jueces">
+            <h:form id="jueces" enctype="multipart/form-data">
                <p:growl id="aviso" showDetail="true" life="5000" />
                 <p:panel header="CALIFICACION JUECES" id="pnlJueces"  
                          style="width:auto;">
@@ -44,31 +44,31 @@ and open the template in the editor.
                                 
                             <p:fieldset legend="Concursos" style="margin-bottom:10px; margin-top:10px;" >                                    
                                     Centro Trabajo *:
-                                    <p:selectOneMenu id="subempresas" value="#{concursoBean.nitSubemrpesa}" > 
+                                    <p:selectOneMenu styleClass="subempresas" value="#{concursoBean.subempresa.nitsubempresa}" > 
                                     <f:selectItem itemLabel="Seleccione..." itemValue="" />                                                
                                     <f:selectItems  value="#{concursoBean.listaSubEmpresas}" />                                      
-                                    <p:ajax update="gConcursos, gEquipos,actividadesEquipo" listener="#{concursoBean.getListConcursosSubempresa}"/>
+                                    <p:ajax update="@(.gConcursos),@(.actividadesEquipo)" listener="#{concursoBean.getListConcursosSubempresa}"/>
                                     </p:selectOneMenu>
                                     
                                     Concursos: *
-                                    <p:selectOneMenu id="gConcursos" value="#{concursoBean.concurso.codConcurso}">
+                                    <p:selectOneMenu styleClass="gConcursos" value="#{concursoBean.concurso.codConcurso}">
                                     <f:selectItem itemLabel="Seleccione..." itemValue="" />                                                
-                                    <f:selectItems   value="#{concursoBean.listConcursosSubempresa}" var="gCon" itemValue="#{gCon.value}" itemLabel="#{gCon.label}"/>
-                                    <p:ajax update="gEquipos,actividadesEquipo" listener="#{concursoBean.getListaGrupoConcurso}"/>
+                                    <f:selectItems   value="#{concursoBean.listConcursosSubempresa}"/>
+                                    <f:ajax event="change" render="gEquipos" listener="#{concursoBean.getListaGrupoConcurso}"/>
                                     </p:selectOneMenu>
                                     
                                     Equipos: *
-                                    <p:selectOneMenu id="gEquipos" value="#{concursoBean.grupoConcurso.codGrupo}">
+                                    <p:selectOneMenu id="gEquipos" styleClass="gEquipos" value="#{concursoBean.grupoConcurso.codGrupo}">
                                     <f:selectItem itemLabel="Seleccione..." itemValue="" />                                                
                                     <f:selectItems   value="#{concursoBean.listGruposConcurso}" />
-                                    <p:ajax update="actividadesEquipo" listener="#{concursoBean.cargarCalificacionesJueces()}"/>
+                                    <p:ajax update="@(.actividadesEquipo),@(.gConcursos)" listener="#{concursoBean.cargarCalificacionesJueces()}"/>
                                     </p:selectOneMenu>
                                     
                                     
                             </p:fieldset>
                                 
                             <p:fieldset legend="Actividades Equipo" style="margin-bottom:10px; margin-top:10px;" >                                    
-                                <p:dataTable id="actividadesEquipo" var="varCalificaciones" value="#{concursoBean.listCalificacionesActividadJueces}"
+                                <p:dataTable styleClass="actividadesEquipo" var="varCalificaciones" value="#{concursoBean.listCalificacionesActividadJueces}"
                                              rowStyleClass="letra-xx-small-centro" style="font-size: 10px;width: 100%">                                        
                                     <p:column headerText="Actividad">
                                         <h:outputText value="#{varCalificaciones.actividad.nombre}"/>
@@ -103,10 +103,12 @@ and open the template in the editor.
                                             <p:inputText value="#{concursoBean.calificacionActividad.calificacion}"/>                                            
                                         </p:column>
                                     <p:column>
-                                        <p:commandButton id="guardarCalif"  icon="ui-icon-disk" value="Guardar" update="actividadesEquipo" action="#{concursoBean.guardarCalificacion}" />
+                                        <p:commandButton id="guardarCalif"  icon="ui-icon-disk" value="Guardar"  
+                                                         update="@(.actividadesEquipo)" actionListener="#{concursoBean.guardarCalificacion}"
+                                        />
                                     </p:column>
                                 </h:panelGrid>
-                                </p:dialog>
+                            </p:dialog>
                                 
                                 
                         <p:dialog id="adjuntosDlg" widgetVar="dlg3" width="50%" height="50%" header="Adjuntos Actividad" resizable="false" styleClass="dlgAdjuntosJueces">

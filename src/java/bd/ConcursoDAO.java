@@ -507,7 +507,7 @@ public class ConcursoDAO {
                     = " SELECT cod_grupo, gconc.cod_concurso codgconc, conc.nombre nomconc, gconc.nombre nombregconc, conc.participantes participantes " +
                         " FROM campaña.grupo_concurso gconc " +
                         " JOIN campaña.concurso conc on(conc.cod_concurso=gconc.cod_concurso) "+
-                        " WHERE conc.fk_nitempresa='"+nit+"' and conc.cod_concurso='"+codConcurso+"'" +
+                        " WHERE gconc.fk_nitsubempresa='"+nitsesion+"' and conc.cod_concurso='"+codConcurso+"'" +
                         " ORDER BY conc.cod_concurso";
 
             rs = consulta.ejecutar(sql);

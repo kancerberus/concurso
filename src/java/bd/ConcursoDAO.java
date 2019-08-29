@@ -571,11 +571,11 @@ public class ConcursoDAO {
             String sql
                     = " select nombre, direccion, cod_grupo, cod_adjunto " +
                     "from campaña.adjuntos_actividad " +
-                    "where cod_actividad='"+calificacionActividad.getCodActividad()+"' ";
+                    "where cod_actividad='"+calificacionActividad.getCodActividad()+"' and cod_grupo='"+calificacionActividad.getCodGrupo()+"' ";
 
             rs = consulta.ejecutar(sql);
 
-            while (rs.next()) {                
+                while (rs.next()) {                
                 adjActividad=new AdjuntosActividad();
                 adjActividad.setCodAdjunto(rs.getInt("cod_adjunto"));
                 adjActividad.setNombre(rs.getString("nombre").trim());
@@ -810,7 +810,8 @@ public class ConcursoDAO {
                     = " select cact.cod_actividad codact, cact.calificacion calificacion, act.nombre nomact" +
                     " from campaña.calificacion_actividad cact " +
                     " join campaña.actividad act on (act.cod_actividad=cact.cod_actividad) " +
-                    " where cod_grupo='"+codGrupo+"' ";
+                    " where cod_grupo='"+codGrupo+"' "
+                    + " ORDER BY act.cod_actividad ";
 
             rs = consulta.ejecutar(sql);
 

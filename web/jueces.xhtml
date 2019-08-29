@@ -53,22 +53,22 @@ and open the template in the editor.
                                     Concursos: *
                                     <p:selectOneMenu id="gConcursos" value="#{concursoBean.concurso.codConcurso}">
                                     <f:selectItem itemLabel="Seleccione..." itemValue="" />                                                
-                                    <f:selectItems   value="#{concursoBean.listaConcursoss}" var="con" itemLabel="#{con.nombre}" itemValue="#{con.codConcurso}" />
+                                    <f:selectItems   value="#{concursoBean.listConcursosSubempresa}" var="gCon" itemValue="#{gCon.value}" itemLabel="#{gCon.label}"/>
                                     <p:ajax update="gEquipos,actividadesEquipo" listener="#{concursoBean.getListaGrupoConcurso}"/>
                                     </p:selectOneMenu>
                                     
                                     Equipos: *
                                     <p:selectOneMenu id="gEquipos" value="#{concursoBean.grupoConcurso.codGrupo}">
                                     <f:selectItem itemLabel="Seleccione..." itemValue="" />                                                
-                                    <f:selectItems   value="#{concursoBean.listaGrupoConcursoss}" var="gCon" itemLabel="#{gCon.nombre}" itemValue="#{gCon.codGrupo}" />
-                                    <p:ajax update="actividadesEquipo" listener="#{concursoBean.cargarCalificaciones()}"/>
+                                    <f:selectItems   value="#{concursoBean.listGruposConcurso}" />
+                                    <p:ajax update="actividadesEquipo" listener="#{concursoBean.cargarCalificacionesJueces()}"/>
                                     </p:selectOneMenu>
                                     
                                     
                             </p:fieldset>
                                 
                             <p:fieldset legend="Actividades Equipo" style="margin-bottom:10px; margin-top:10px;" >                                    
-                                <p:dataTable id="actividadesEquipo" var="varCalificaciones" value="#{concursoBean.listCalificacionesActividad}"
+                                <p:dataTable id="actividadesEquipo" var="varCalificaciones" value="#{concursoBean.listCalificacionesActividadJueces}"
                                              rowStyleClass="letra-xx-small-centro" style="font-size: 10px;width: 100%">                                        
                                     <p:column headerText="Actividad">
                                         <h:outputText value="#{varCalificaciones.actividad.nombre}"/>
@@ -82,8 +82,8 @@ and open the template in the editor.
                                     </p:column >
                                     <p:column width="6%" headerText="Ver Adjuntos">                                        
                                         <p:commandButton id="openDialogLink"  icon="ui-icon-clipboard" value="ver Adjuntos" onclick="PF('dlg3').show();" 
-                                                                 oncomplete="PF('dlg3').show();"   >
-                                            <p:ajax update="@(.dlgAdjuntosJueces)" listener="#{concursoBean.subirItemActividadAdjuntosJueces()}"/>
+                                                         oncomplete="PF('dlg3').show();"  >
+                                            <p:ajax update="@(.dlgAdjuntosJueces)" listener="#{concursoBean.subirItemActividadAdjuntosJueces()}"  />
                                         </p:commandButton>
                                     </p:column>
                                     

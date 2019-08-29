@@ -5,13 +5,14 @@
  */
 package modelo;
 
+import java.io.Serializable;
 import java.util.Date;
 
 /**
  *
  * @author Andres
  */
-public class Actividad {
+public class Actividad implements Serializable{
 
     private String codActividad;
     private String nombre;

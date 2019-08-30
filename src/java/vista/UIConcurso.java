@@ -68,7 +68,7 @@ public class UIConcurso implements Serializable {
     private Actividad actividad;   
     private AdjuntosActividad adjActividad;
     private Empresa empresa=new Empresa();  
-    private CalificacionActividad calificacionActividad= new CalificacionActividad();    
+    private CalificacionActividad calificacionActividad;    
     private Boolean captain;        
     private SubEmpresa subempresa;
     private Integer puntajeAcum;
@@ -79,7 +79,7 @@ public class UIConcurso implements Serializable {
     
     private ArrayList<SelectItem> listActividades=new ArrayList<>();
     private ArrayList<Actividad> listActividadess=new ArrayList<>();
-    private ArrayList<AdjuntosActividad> listaAdjuntos=new ArrayList<>();    
+    private ArrayList<AdjuntosActividad> listaAdjuntos=new ArrayList<>();
     private ArrayList<SelectItem> listActividadesJueces=new ArrayList<>();
     private ArrayList<Actividad> listActividadesJuecess=new ArrayList<>();
     private ArrayList<SelectItem> listaConcurso=new ArrayList<>();    
@@ -92,6 +92,7 @@ public class UIConcurso implements Serializable {
     private ArrayList<GrupoConcurso> listaGrupoConcursoss=new ArrayList<>();
     private ArrayList<SelectItem> listaGruposConcursosSubempresa=new ArrayList<>();    
     private ArrayList<SelectItem> listaSubEmpresas=new ArrayList<>();
+    private ArrayList<SubEmpresa> listaSubEmpresasnit=new ArrayList<>();
     private ArrayList<SelectItem> listGruposParticipantes=new ArrayList<>();
     private ArrayList<GrupoConcursoParticipantes> listGrupoParticipantess=new ArrayList<>();
     private ArrayList<CalificacionActividad> listCalificacionesActividad=new ArrayList<>();
@@ -100,7 +101,8 @@ public class UIConcurso implements Serializable {
     
     public Utilidades util = new Utilidades();    
     private ExpressionFactory ef;
-    public UIConcurso()  throws Exception {       
+    public UIConcurso()  throws Exception { 
+       adjActividad=new AdjuntosActividad();
        concurso=new Concurso();
        concurso.setEmpresa(new Empresa());      
        grupoConcurso=new GrupoConcurso();
@@ -112,7 +114,7 @@ public class UIConcurso implements Serializable {
        listaConcursosEmpresas=new ArrayList<>();
        contextoJSF = FacesContext.getCurrentInstance();
        contextoEL = contextoJSF.getELContext();        
-       listCalificacionesActividadJueces.clear();
+       listCalificacionesActividadJueces=new ArrayList<>();
        subempresa=new SubEmpresa();
        calificacionActividad=new CalificacionActividad();
        this.limpiarActividad();
@@ -269,16 +271,7 @@ public class UIConcurso implements Serializable {
         
     }   
     
-     public void subirItemActividadAdjuntosJueces() {            
-         try {
-             calificacionActividad= (CalificacionActividad) UtilJSF.getBean("varCalificaciones");
-             getListConcursosSubempresa();
-            this.cargarAdjuntosCalificaciones();
-         } catch (Exception e) {
-             Logger.getLogger(UIConcurso.class.getName()).log(Level.SEVERE, null, e);
-         }
-         
-    }   
+    
     
     public void eliminarAdjuntos(){
         try {
@@ -339,6 +332,17 @@ public class UIConcurso implements Serializable {
     
     public void subirItemCalificacion() {         
         calificacionActividad= (CalificacionActividad) UtilJSF.getBean("varCalificaciones");       
+    }
+    
+    public void subirItemActividadAdjuntosJueces() {            
+         try {
+             calificacionActividad= (CalificacionActividad) UtilJSF.getBean("varCalificaciones");
+             getListConcursosSubempresa();
+            this.cargarAdjuntosCalificaciones();
+         } catch (Exception e) {
+             Logger.getLogger(UIConcurso.class.getName()).log(Level.SEVERE, null, e);
+         }
+         
     }
     
     public void agregarEmpleado() throws Exception{        
@@ -496,7 +500,7 @@ public class UIConcurso implements Serializable {
             for (int i = 0; i < listActividadess.size(); i++) {                    
                         listActividades.add(new SelectItem(listActividadess.get(i).getCodActividad(), listActividadess.get(i).getNombre()));
                     }
-            
+            this.cargarCalificacionesJueces();
         } catch (Exception e) {
             Logger.getLogger(UIConcurso.class.getName()).log(Level.SEVERE, null, e);
             util.mostrarMensaje(e.getMessage());
@@ -737,21 +741,20 @@ public class UIConcurso implements Serializable {
     
     
     public ArrayList<SelectItem> getListaSubEmpresas() throws Exception{
-        try {            
-            concurso=new Concurso();                        
+        try {                                   
             contextoJSF = FacesContext.getCurrentInstance();
             contextoEL = contextoJSF.getELContext();
             ef = contextoJSF.getApplication().getExpressionFactory();
             gestorConcurso = new GestorConcurso();
-                                    
+            
             String nitsesion = (String) ef.createValueExpression(contextoEL, "#{loginBean.sesion.usuario.subEmpresa.nitsubempresa}", String.class).getValue(contextoEL);                                    
             
             String nitem=gestorConcurso.cargarNitEmpresa(nitsesion);  
             
-            ArrayList<SubEmpresa> listaSubEmpresasnit;
+            listaSubEmpresasnit=new ArrayList<>();
             listaSubEmpresasnit=gestorConcurso.cargarListaSubempresas(nitem);
-            listaSubEmpresas.clear();
-            listaAdjuntos.clear();
+            listaSubEmpresas.clear();              
+            
             
             
             for (int i = 0; i < listaSubEmpresasnit.size(); i++) {
@@ -767,7 +770,6 @@ public class UIConcurso implements Serializable {
     public ArrayList<SelectItem> getListaGrupoConcurso() throws Exception{
             
             try {
-                grupoConcurso=new GrupoConcurso();
                 this.listActividades= new ArrayList<>();
                 gestorConcurso = new GestorConcurso();                
                 
@@ -818,9 +820,8 @@ public class UIConcurso implements Serializable {
     }
 
     public StreamedContent getFileDownload() {        
-        try {         
+        try {                     
             adjActividad= (AdjuntosActividad) UtilJSF.getBean("varVerAdjuntos");
-            
             
             String archivo=adjActividad.getDireccion()+"/"+adjActividad.getNombre();
             InputStream stream = new FileInputStream(archivo);
@@ -830,15 +831,25 @@ public class UIConcurso implements Serializable {
         }
         return fileDownload;
     }
+    
+    public void limpiarActividades() throws Exception{          
+        listCalificacionesActividadJueces=new ArrayList<>();
+        listCalificacionesActividadJueces.clear();
+        calificacionActividad.setCodGrupo("");
+        this.guardarCalificacion();
+    }
 
     public ArrayList<SelectItem> getListConcursosSubempresa() {
-        try {                   
+        try {                            
+            
+                concurso=new Concurso();
                 gestorConcurso = new GestorConcurso();                
                 listActividadess=new ArrayList<>();
                 
                 listaConcursoss=new ArrayList<>();
                 listaConcursoss = gestorConcurso.listarConcursos(subempresa.getNitsubempresa());
-                listConcursosSubempresa.clear();                
+                listConcursosSubempresa=new ArrayList<>();
+                
                 
                 for (int i = 0; i < listaConcursoss.size(); i++) {
                         listConcursosSubempresa.add(new SelectItem(listaConcursoss.get(i).getCodConcurso(), listaConcursoss.get(i).getNombre(), listaConcursoss.get(i).getFecha_limite_insc().toString()));                        
@@ -914,47 +925,48 @@ public class UIConcurso implements Serializable {
         }
 
     }
-    
-    public StreamedContent mostrarImagen(String nom){        
-        ByteArrayOutputStream out=null;        
-        InputStream logo=null;
-                
-        out=traerArchivo(nom);
-        logo=new ByteArrayInputStream(out.toByteArray());
-        return new DefaultStreamedContent(logo);        
+
+
+    public ArrayList<SubEmpresa> getListaSubEmpresasnit() {        
+        return listaSubEmpresasnit;
     }
     
+    /*public StreamedContent mostrarImagen(String nom){
+    ByteArrayOutputStream out=null;
+    InputStream logo=null;
+    out=traerArchivo(nom);
+    logo=new ByteArrayInputStream(out.toByteArray());
+    return new DefaultStreamedContent(logo);
+    }
     public ByteArrayOutputStream traerArchivo(String ruta){
-        ByteArrayOutputStream out=null;
-        String path=ruta;
-        InputStream in=null;
-        
-        try {
-            
-            File remoteFile=new File(path);
-            in=new BufferedInputStream(new FileInputStream(remoteFile));
-            out=new  ByteArrayOutputStream((int) remoteFile.length());
-            byte[] buffer=new byte [4096];
-            int len=0;
-            
-            while ((len=in.read(buffer,0,buffer.length))!=-1){
-                out.write(buffer,0,len);
-            }
-            out.flush();
-            
-        } catch (Exception e) {
-            Logger.getLogger(UIConcurso.class.getName()).log(Level.SEVERE, null, e);
-        }
-        return out;
+    ByteArrayOutputStream out=null;
+    String path=ruta;
+    InputStream in=null;
+    try {
+    File remoteFile=new File(path);
+    in=new BufferedInputStream(new FileInputStream(remoteFile));
+    out=new  ByteArrayOutputStream((int) remoteFile.length());
+    byte[] buffer=new byte [4096];
+    int len=0;
+    while ((len=in.read(buffer,0,buffer.length))!=-1){
+    out.write(buffer,0,len);
+    }
+    out.flush();
+    } catch (Exception e) {
+    Logger.getLogger(UIConcurso.class.getName()).log(Level.SEVERE, null, e);
+    }
+    return out;
+    }*/
+    public void setListaSubEmpresasnit(ArrayList<SubEmpresa> listaSubEmpresasnit) {
+        this.listaSubEmpresasnit = listaSubEmpresasnit;
     }
 
-    public SubEmpresa getSubempresa() {
+    public SubEmpresa getSubempresa() {        
         return subempresa;
     }
 
-    public void setSubempresa(SubEmpresa subempresa) {
-        listCalificacionesActividadJueces.clear();
-        this.subempresa = subempresa;
+    public void setSubempresa(SubEmpresa subempresa) {                        
+        this.subempresa = subempresa;                        
     }
 
     public ArrayList<CalificacionActividad> getListCalificacionesActividadJueces() {

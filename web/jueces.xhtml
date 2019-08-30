@@ -44,16 +44,16 @@ and open the template in the editor.
                                 
                             <p:fieldset legend="Concursos" style="margin-bottom:10px; margin-top:10px;" >                                    
                                     Centro Trabajo *:
-                                    <p:selectOneMenu styleClass="subempresas" value="#{concursoBean.subempresa.nitsubempresa}" > 
+                                    <p:selectOneMenu styleClass="subempresas" value="#{concursoBean.subempresa.nitsubempresa}" valueChangeListener="#{concursoBean.limpiarActividades()}" > 
                                     <f:selectItem itemLabel="Seleccione..." itemValue="" />                                                
                                     <f:selectItems  value="#{concursoBean.listaSubEmpresas}" />                                      
-                                    <p:ajax update="@(.gConcursos),@(.actividadesEquipo)" listener="#{concursoBean.getListConcursosSubempresa}"/>
+                                    <p:ajax update="@(.gConcursos),@(.actividadesEquipo)" rendered="@(.actividadesEquipo)" listener="#{concursoBean.getListConcursosSubempresa}"/>
                                     </p:selectOneMenu>
                                     
                                     Concursos: *
-                                    <p:selectOneMenu styleClass="gConcursos" value="#{concursoBean.concurso.codConcurso}">
+                                    <p:selectOneMenu styleClass="gConcursos" value="#{concursoBean.concurso.codConcurso}" valueChangeListener="#{concursoBean.getListConcursosSubempresa}">
                                     <f:selectItem itemLabel="Seleccione..." itemValue="" />                                                
-                                    <f:selectItems   value="#{concursoBean.listConcursosSubempresa}"/>
+                                    <f:selectItems   value="#{concursoBean.listConcursosSubempresa}" />
                                     <f:ajax event="change" render="gEquipos" listener="#{concursoBean.getListaGrupoConcurso}"/>
                                     </p:selectOneMenu>
                                     
@@ -82,8 +82,7 @@ and open the template in the editor.
                                     </p:column >
                                     <p:column width="6%" headerText="Ver Adjuntos">                                        
                                         <p:commandButton id="openDialogLink"  icon="ui-icon-clipboard" value="ver Adjuntos" onclick="PF('dlg3').show();" 
-                                                         oncomplete="PF('dlg3').show();"  >
-                                            <p:ajax update="@(.dlgAdjuntosJueces)" listener="#{concursoBean.subirItemActividadAdjuntosJueces()}"  />
+                                                    update="@(.dlgAdjuntosJueces)" process="@this"   oncomplete="PF('dlg3').show();" actionListener="#{concursoBean.subirItemActividadAdjuntosJueces()}"  >                                            
                                         </p:commandButton>
                                     </p:column>
                                     
@@ -104,7 +103,7 @@ and open the template in the editor.
                                         </p:column>
                                     <p:column>
                                         <p:commandButton id="guardarCalif"  icon="ui-icon-disk" value="Guardar"  
-                                                         update="@(.actividadesEquipo)" actionListener="#{concursoBean.guardarCalificacion}"
+                                                         update="@(.actividadesEquipo),aviso" actionListener="#{concursoBean.guardarCalificacion}"
                                         />
                                     </p:column>
                                 </h:panelGrid>
@@ -129,7 +128,7 @@ and open the template in the editor.
                                       </p:columnGroup>
 
                                       <p:column>                                                                                        
-                                              <p:commandButton icon=" ui-icon-circle-arrow-s" title="Ver Adjunto" ajax="false">
+                                          <p:commandButton icon=" ui-icon-circle-arrow-s" title="Ver Adjunto" ajax="false">
                                                   <p:fileDownload value="#{concursoBean.fileDownload}" />
                                               </p:commandButton>                                                                                        
                                       </p:column>

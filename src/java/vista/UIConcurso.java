@@ -501,6 +501,7 @@ public class UIConcurso implements Serializable {
                         listActividades.add(new SelectItem(listActividadess.get(i).getCodActividad(), listActividadess.get(i).getNombre()));
                     }
             this.cargarCalificacionesJueces();
+            this.listCalificacionesActividadJueces.clear();
         } catch (Exception e) {
             Logger.getLogger(UIConcurso.class.getName()).log(Level.SEVERE, null, e);
             util.mostrarMensaje(e.getMessage());

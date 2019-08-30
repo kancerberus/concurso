@@ -70,6 +70,9 @@ and open the template in the editor.
                             <p:fieldset legend="Actividades Equipo" style="margin-bottom:10px; margin-top:10px;" >                                    
                                 <p:dataTable styleClass="actividadesEquipo" var="varCalificaciones" value="#{concursoBean.listCalificacionesActividadJueces}"
                                              rowStyleClass="letra-xx-small-centro" style="font-size: 10px;width: 100%">                                        
+                                    <p:column width="10%" headerText="codigo">
+                                        <h:outputText value="#{varCalificaciones.actividad.codActividad}"/>
+                                    </p:column>
                                     <p:column headerText="Actividad">
                                         <h:outputText value="#{varCalificaciones.actividad.nombre}"/>
                                     </p:column>                                                                                            

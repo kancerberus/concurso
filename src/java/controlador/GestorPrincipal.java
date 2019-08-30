@@ -16,6 +16,7 @@ public class GestorPrincipal implements Serializable {
     private boolean concursos=false;
     private boolean equipos=false;
     private boolean jueces=false;    
+    private boolean tablaPosiciones=false;
 
     public String selGeneral(String opcion) {
         switch (opcion) {            
@@ -25,6 +26,7 @@ public class GestorPrincipal implements Serializable {
                 setConcursos(false);
                 setEquipos(false);
                 setJueces(false);
+                setTablaPosiciones(false);
                 break;
                 
             case "concursos":                
@@ -32,6 +34,7 @@ public class GestorPrincipal implements Serializable {
                 setConcursos(true);
                 setEquipos(false);
                 setJueces(false);
+                setTablaPosiciones(false);
                 break;
                 
             case "equipos":                
@@ -39,6 +42,7 @@ public class GestorPrincipal implements Serializable {
                 setConcursos(false);
                 setEquipos(true);
                 setJueces(false);
+                setTablaPosiciones(false);
                 break;
                 
             case "jueces":
@@ -47,10 +51,27 @@ public class GestorPrincipal implements Serializable {
                 setConcursos(false);
                 setEquipos(false);
                 setJueces(true);
+                setTablaPosiciones(false);
                 break;
+                
+            case "tabla_posiciones":
+                setCrearConcurso(false); 
+                setConcursos(false);
+                setEquipos(false);
+                setJueces(false);
+                setTablaPosiciones(true);
+                break;    
                 
         }
         return "";
+    }
+
+    public boolean isTablaPosiciones() {
+        return tablaPosiciones;
+    }
+
+    public void setTablaPosiciones(boolean tablaPosiciones) {
+        this.tablaPosiciones = tablaPosiciones;
     }
 
     public boolean isJueces() {

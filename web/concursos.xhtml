@@ -82,6 +82,9 @@ and open the template in the editor.
                                 <p:fieldset legend="Actividades Equipo: #{concursoBean.grupoConcurso.nombre}" style="margin-bottom:10px; margin-top:10px;" >                                    
                                     <p:dataTable id="actividadesEquipo" var="varActividadAdjuntos" value="#{concursoBean.listActividadess}"
                                                  rowStyleClass="letra-xx-small-centro" style="font-size: 10px;width: 100%">                                        
+                                        <p:column width="10%" headerText="Codigo">
+                                            <h:outputText value="#{varActividadAdjuntos.codActividad}"/>
+                                        </p:column>
                                         <p:column headerText="Actividad">
                                             <h:outputText value="#{varActividadAdjuntos.nombre}"/>
                                         </p:column>                                                                                            
@@ -112,7 +115,7 @@ and open the template in the editor.
                                         </p:column>
                                     <p:column>
                                         <p:commandButton icon="ui-icon-trash">
-                                            <p:ajax  listener="#{concursoBean.eliminarAdjuntos()}" update="adjuntos"/>
+                                            <p:ajax  listener="#{concursoBean.eliminarAdjuntos()}" update="adjuntos,aviso"/>
                                         </p:commandButton>
                                     </p:column>
                                     <p:column width="100%">

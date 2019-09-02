@@ -174,6 +174,16 @@ public class GestorConcurso extends Gestor implements Serializable{
             }
     }
     
+    public ArrayList<GrupoConcurso> cargarTablaPosiciones(String codConcurso) throws Exception {
+        try {
+                abrirConexion();
+                ConcursoDAO concursoDAO = new ConcursoDAO(conexion);
+                return concursoDAO.cargarTablaPosiciones(codConcurso);
+            } finally {
+                cerrarConexion();
+            }
+    }
+    
     public ArrayList<AdjuntosActividad> cargarListaAdjuntos(Actividad actividad) throws Exception {
         try {
                 abrirConexion();

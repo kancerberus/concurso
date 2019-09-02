@@ -530,6 +530,47 @@ public class ConcursoDAO {
         }
     }
     
+    
+    public ArrayList<GrupoConcurso> cargarTablaPosiciones(String codConcurso) throws SQLException {
+        GrupoConcurso  grupoConcurso;        
+        ArrayList<GrupoConcurso> listaTablaPosiciones = new ArrayList<>();
+        ResultSet rs;
+        Consulta consulta = null;
+        try {
+            
+            consulta = new Consulta(getConexion());
+            String sql
+                    = " SELECT  row_number() OVER(order by gc.cod_grupo) as pos, gc.cod_grupo codgc, gc.nombre nomgc, sub.nitsubempresa nitsub, sub.nombre nomsub, SUM(calificacion) ptajeTotal  " +
+                        " FROM campaña.grupo_concurso gc " +
+                        " JOIN campaña.calificacion_actividad ca ON (gc.cod_grupo=ca.cod_grupo) " +
+                        " JOIN campaña.concurso con on(gc.cod_concurso=con.cod_concurso) " +
+                        " join subempresa sub on (sub.nitsubempresa=gc.fk_nitsubempresa) " +
+                        " WHERE gc.cod_concurso='"+codConcurso+"' " +
+                        " GROUP BY gc.cod_grupo,sub.nitsubempresa " +
+                        " ORDER BY ptajeTotal DESC";
+
+            rs = consulta.ejecutar(sql);
+
+            while (rs.next()) {   
+                grupoConcurso=new GrupoConcurso();
+                grupoConcurso.setCodGrupo(rs.getString("codgc"));                
+                grupoConcurso.setNombre(rs.getString("nomgc"));
+                grupoConcurso.setSubempresa(new SubEmpresa(rs.getString("nitsub"), rs.getString("nomsub")));
+                grupoConcurso.setPuntajeTotal(rs.getInt("ptajeTotal"));  
+                grupoConcurso.setPos(rs.getInt("pos"));
+                listaTablaPosiciones.add(grupoConcurso);
+            }
+            return listaTablaPosiciones;
+
+        } catch (SQLException ex) {
+            throw ex;
+        } finally {
+            consulta.desconectar();
+        }
+    }
+    
+    
+    
     public ArrayList<AdjuntosActividad> cargarListaAdjuntos(Actividad actividad) throws SQLException {
         AdjuntosActividad adjuntosActividad;
         ArrayList<AdjuntosActividad> listaAdjuntosActividad = new ArrayList<>();
@@ -580,7 +621,7 @@ public class ConcursoDAO {
                 adjActividad.setCodAdjunto(rs.getInt("cod_adjunto"));
                 adjActividad.setNombre(rs.getString("nombre").trim());
                 adjActividad.setDireccion(rs.getString("direccion").trim());
-                adjActividad.setGrupoConcurso(new GrupoConcurso(rs.getString("cod_grupo"),null, null, null));
+                adjActividad.setGrupoConcurso(new GrupoConcurso(rs.getString("cod_grupo"),null, null, null,null,null));
                 listaAdjuntosActividadJueces.add(adjActividad);
             }
             return listaAdjuntosActividadJueces;
@@ -807,11 +848,11 @@ public class ConcursoDAO {
         try {
             consulta = new Consulta(getConexion());
             String sql
-                    = " select cact.cod_actividad codact, cact.calificacion calificacion, act.nombre nomact" +
+                    = " select cast(cact.cod_actividad as INTEGER) codact, cact.calificacion calificacion, act.nombre nomact" +
                     " from campaña.calificacion_actividad cact " +
                     " join campaña.actividad act on (act.cod_actividad=cact.cod_actividad) " +
                     " where cod_grupo='"+codGrupo+"' "
-                    + " ORDER BY act.cod_actividad ";
+                    + " ORDER BY codact asc   ";
 
             rs = consulta.ejecutar(sql);
 

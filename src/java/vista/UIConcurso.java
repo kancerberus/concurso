@@ -97,6 +97,8 @@ public class UIConcurso implements Serializable {
     private ArrayList<GrupoConcursoParticipantes> listGrupoParticipantess=new ArrayList<>();
     private ArrayList<CalificacionActividad> listCalificacionesActividad=new ArrayList<>();
     private ArrayList<CalificacionActividad> listCalificacionesActividadJueces=new ArrayList<>();
+    private ArrayList<GrupoConcurso> listTablaPosiciones=new ArrayList<>();
+    
     private GestorConcurso gestorConcurso;
     
     public Utilidades util = new Utilidades();    
@@ -571,6 +573,19 @@ public class UIConcurso implements Serializable {
         }
     }
     
+    public void cargarTablaPosiciones(){
+        try {
+            
+            listTablaPosiciones=new ArrayList<>();            
+            gestorConcurso=new GestorConcurso();
+            
+            listTablaPosiciones.addAll(gestorConcurso.cargarTablaPosiciones(concurso.getCodConcurso()));
+            
+        } catch (Exception e) {
+            Logger.getLogger(UIConcurso.class.getName()).log(Level.SEVERE, null, e);
+        }
+    }
+    
     public ArrayList<SelectItem> getListGruposParticipantes() throws Exception{
         try {
             captain=false;
@@ -702,7 +717,7 @@ public class UIConcurso implements Serializable {
                 
                 }
             catch (Exception ex) {                        
-                        
+                    Logger.getLogger(UIConcurso.class.getName()).log(Level.SEVERE, null, ex);
                 }  
             
                            
@@ -927,6 +942,13 @@ public class UIConcurso implements Serializable {
 
     }
 
+    public ArrayList<GrupoConcurso> getListTablaPosiciones() {
+        return listTablaPosiciones;
+    }
+
+    public void setListTablaPosiciones(ArrayList<GrupoConcurso> listTablaPosiciones) {
+        this.listTablaPosiciones = listTablaPosiciones;
+    }
 
     public ArrayList<SubEmpresa> getListaSubEmpresasnit() {        
         return listaSubEmpresasnit;

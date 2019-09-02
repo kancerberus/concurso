@@ -17,16 +17,36 @@ public class GrupoConcurso implements Serializable{
     private Concurso concurso;
     private String nombre;    
     private SubEmpresa subempresa;
+    private Integer puntajeTotal;
+    private Integer pos;
 
-    public GrupoConcurso(String codGrupo, Concurso concurso, String nombre, SubEmpresa subempresa) {
+    public GrupoConcurso(String codGrupo, Concurso concurso, String nombre, SubEmpresa subempresa, Integer puntajeTotal, Integer pos) {
         this.codGrupo = codGrupo;
         this.concurso = concurso;
         this.nombre = nombre;     
         this.subempresa = subempresa;
+        this.puntajeTotal= puntajeTotal;
+        this.pos=pos;
     }      
 
     public GrupoConcurso() {
 
+    }
+
+    public Integer getPos() {
+        return pos;
+    }
+
+    public void setPos(Integer pos) {
+        this.pos = pos;
+    }
+
+    public Integer getPuntajeTotal() {
+        return puntajeTotal;
+    }
+
+    public void setPuntajeTotal(Integer puntajeTotal) {
+        this.puntajeTotal = puntajeTotal;
     }
 
     /**

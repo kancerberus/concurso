@@ -16,7 +16,7 @@ public class GestorPrincipal implements Serializable {
     private boolean concursos=false;
     private boolean equipos=false;
     private boolean jueces=false;    
-    private boolean tablaPosiciones=false;
+    private boolean tabPosiciones=false;
 
     public String selGeneral(String opcion) {
         switch (opcion) {            
@@ -26,7 +26,7 @@ public class GestorPrincipal implements Serializable {
                 setConcursos(false);
                 setEquipos(false);
                 setJueces(false);
-                setTablaPosiciones(false);
+                setTabPosiciones(false);
                 break;
                 
             case "concursos":                
@@ -34,7 +34,7 @@ public class GestorPrincipal implements Serializable {
                 setConcursos(true);
                 setEquipos(false);
                 setJueces(false);
-                setTablaPosiciones(false);
+                setTabPosiciones(false);
                 break;
                 
             case "equipos":                
@@ -42,7 +42,7 @@ public class GestorPrincipal implements Serializable {
                 setConcursos(false);
                 setEquipos(true);
                 setJueces(false);
-                setTablaPosiciones(false);
+                setTabPosiciones(false);
                 break;
                 
             case "jueces":
@@ -51,29 +51,30 @@ public class GestorPrincipal implements Serializable {
                 setConcursos(false);
                 setEquipos(false);
                 setJueces(true);
-                setTablaPosiciones(false);
+                setTabPosiciones(false);
                 break;
                 
-            case "tabla_posiciones":
+            case "tab_posiciones":
+                
                 setCrearConcurso(false); 
                 setConcursos(false);
                 setEquipos(false);
                 setJueces(false);
-                setTablaPosiciones(true);
+                setTabPosiciones(true);
                 break;    
                 
         }
         return "";
     }
 
-    public boolean isTablaPosiciones() {
-        return tablaPosiciones;
+    public boolean isTabPosiciones() {
+        return tabPosiciones;
     }
 
-    public void setTablaPosiciones(boolean tablaPosiciones) {
-        this.tablaPosiciones = tablaPosiciones;
-    }
-
+    public void setTabPosiciones(boolean tabPosiciones) {
+        this.tabPosiciones = tabPosiciones;
+    }    
+    
     public boolean isJueces() {
         return jueces;
     }

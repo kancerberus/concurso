@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"     
+      xmlns:f="http://java.sun.com/jsf/core"      
+      xmlns:ui="http://java.sun.com/jsf/facelets"        
+            
+      >
+    
+    
+    <h:body>
+        <ui:composition >
+            <h:form styleClass="tabPosiciones" enctype="multipart/form-data">
+               <p:growl id="avisoTabPosiciones" showDetail="true" life="5000" />
+               <p:panel  header="TABLA POSICIONES" styleClass="pnltabPosiciones"  
+                         style="width:auto;">
+                    <table>
+                        <tr><td>                              
+                            <p:fieldset legend="Datos de Inicio de Sesión" style="margin-bottom:10px; margin-top:10px;" >
+                                <table cellpadding="5">                        
+                                    <tr>
+                                        <td align="center">
+                                            <p:panelGrid id="tblDatosSesion" columns="4" style="width:1000px; font-size: 90%;">
+                                                <f:facet name="header">
+                                                    <h:outputText value="" />
+                                                </f:facet>
+                                                <h:outputText value="Nombre de la empresa" style="font-weight: bold;" /><h:outputText value="#{loginBean.sesion.usuario.subEmpresa.nombre}" />                                                
+                                                <h:outputText value="Fecha" style="font-weight: bold;"/>
+                                                <h:outputText value="#{currentDate}">
+                                                    <f:convertDateTime pattern="MM/dd/yyyy" type="date"/> 
+                                                </h:outputText>                                                
+                                                <h:outputText value="Usuario de sesion" style="font-weight: bold;" /><h:outputText value="#{loginBean.sesion.usuario.nomusuario}"/>
+                                                <h:outputText value="Nombre" style="font-weight: bold;" /><h:outputText value="#{loginBean.sesion.usuario.nombre}"/>
+                                            </p:panelGrid>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </p:fieldset> 
+                                
+                                <p:fieldset legend="Concursos" style="margin-bottom:10px; margin-top:10px;" >                                    
+                                Concursos: *
+                                <p:selectOneMenu value="#{concursoBean.concurso.codConcurso}">
+                                <f:selectItem itemLabel="Seleccione..." itemValue="" />                                                
+                                <f:selectItems   value="#{concursoBean.listaConcursosEmpresas}" />
+                                <p:ajax update=" @(.pnltabPosiciones), dtPosiciones " listener="#{concursoBean.cargarTablaPosiciones()}" />
+                                </p:selectOneMenu>                                    
+                            </p:fieldset>  
+                            <p:fieldset legend="POSICIONES" style="margin-bottom:10px; margin-top:10px;" >
+                                <p:dataTable id="dtPosiciones" var="varPosiciones" value="#{concursoBean.listTablaPosiciones}"
+                                             rowStyleClass="letra-xx-small-centro" style="font-size: 10px;width: 100%">
+                                    <p:column width="2%" headerText="Posiciones" style="font-weight: bolder;font-size: 12px">
+                                            <h:outputText value="#{varPosiciones.pos}"/>
+                                        </p:column>
+                                        <p:column width="10%" headerText="Equipo">
+                                            <h:outputText value="#{varPosiciones.nombre}"/>
+                                        </p:column>
+                                        <p:column headerText="Centro Trabajo">
+                                            <h:outputText value="#{varPosiciones.subempresa.nombre}"/>
+                                        </p:column>
+                                        <p:column headerText="Puntaje Total Actividades">
+                                            <h:outputText value="#{varPosiciones.puntajeTotal}"/>
+                                        </p:column>
+                                </p:dataTable>                                        
+                            </p:fieldset>
+                            
+                           </td>
+                        </tr>   
+                    </table> 
+                </p:panel>                                                
+            </h:form>
+        </ui:composition>
+    </h:body>
+
+
+</html>

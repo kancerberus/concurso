@@ -74,6 +74,7 @@ public class UIConcurso implements Serializable {
     private Integer puntajeAcum;
     private UploadedFile file;  
     private StreamedContent fileDownload;
+    private Date hoy=new Date();
     
     
     
@@ -155,11 +156,9 @@ public class UIConcurso implements Serializable {
                     Long codConcurso=gestorConcurso.nextval(GestorConcurso.CAMPAÑA_CONCURSO_COD_CONCURSO_SEQ);
                     concurso.setCodConcurso(codConcurso.toString());
                     concurso.getEmpresa().setNombre(gestorConcurso.cargarNombreEmpresa(empresa.getNitempresa()));
-                    concurso.setLogo("C:/Concursos/"+concurso.getEmpresa().getNombre()+"/"+concurso.getNombre());
-                    File carpeta = new File(concurso.getLogo());
-                    if (!carpeta.exists()) {
-                        carpeta.mkdirs();
-                    }
+                    
+                    
+                    
                     
                     
                     Integer resultado = gestorConcurso.guardarConcurso(concurso);
@@ -205,8 +204,7 @@ public class UIConcurso implements Serializable {
             }
             concurso.getEmpresa();
             if (hoy.after(concurso.getFecha_limite_insc())) {
-                util.mostrarMensaje("Fecha Limite De inscripcion Vencida!");
-                msg = "Fecha Limite De inscripcion Vencida!"; 
+                util.mostrarMensaje("Fecha Limite De inscripcion Vencida!");                
                 concurso=new Concurso();
                 this.getListaConcursosEmpresas();                       
                 invalido = true;              
@@ -227,11 +225,10 @@ public class UIConcurso implements Serializable {
                         util.mostrarMensaje("!! El Equipo no pudo ser almacenado !!");
                     }
             } else {                
-                    util.mostrarMensaje("Hay campos requeridos sin diligenciar.");                     
+                util.mostrarMensaje("Hay campos requeridos sin diligenciar.");                     
             }            
         } catch (Exception e) {
-            Logger.getLogger(UIConcurso.class.getName()).log(Level.SEVERE, null, e);
-            util.mostrarMensaje(e.getMessage());
+            Logger.getLogger(UIConcurso.class.getName()).log(Level.SEVERE, null, e);            
             util.mostrarMensaje("!! El Equipo no pudo ser almacenado !!");               
         }
     }
@@ -260,7 +257,7 @@ public class UIConcurso implements Serializable {
             for(int i=0;i<getListaGruposConcursos().size();i++){
                 if(grupoConcurso.getCodGrupo().equals(listaGrupoConcursoss.get(i).getCodGrupo())){
                     grupoConcurso.setSubempresa(new SubEmpresa(listaGrupoConcursoss.get(i).getSubempresa().getNitsubempresa(),listaGrupoConcursoss.get(i).getSubempresa().getNombre() ));
-                    grupoConcurso.setConcurso(new Concurso("", "", new Empresa(listaGrupoConcursoss.get(i).getConcurso().getEmpresa().getNitempresa(), listaGrupoConcursoss.get(i).getConcurso().getEmpresa().getNombre()) , null, true,null,""));
+                    grupoConcurso.setConcurso(new Concurso("", "", new Empresa(listaGrupoConcursoss.get(i).getConcurso().getEmpresa().getNitempresa(), listaGrupoConcursoss.get(i).getConcurso().getEmpresa().getNombre()) , null, true,null));
                     grupoConcurso.setNombre(listaGrupoConcursoss.get(i).getNombre());
                 }
             }
@@ -350,7 +347,8 @@ public class UIConcurso implements Serializable {
     public void agregarEmpleado() throws Exception{        
         Boolean invalido = false;
         String msg = null;        
-        Date hoy=new Date();
+        Date hoy=new Date();        
+        
         try {            
             
             //verificar que todas las cajas este llenas           
@@ -360,11 +358,13 @@ public class UIConcurso implements Serializable {
             }           
             
             
-            this.grupoParticipantes.setEmpleado(empleado); 
-            this.grupoParticipantes.getGrupoConcurso().setCodGrupo(codGrupo);            
+            this.grupoParticipantes.setEmpleado(empleado);
+            this.grupoParticipantes.getGrupoConcurso().setCodGrupo(codGrupo);
             
-            if(listGruposParticipantes.size()==(concurso.getParticipantes())){
-                msg = "Cupo completo";                
+            Integer participantes = gestorConcurso.cargarParticipantes(concurso.getCodConcurso());
+            
+            if(listGruposParticipantes.size()>=(participantes)){
+                util.mostrarMensaje("Cupo Completado.");                
                 invalido = true;
             }
             
@@ -383,7 +383,7 @@ public class UIConcurso implements Serializable {
                     }
             } else {
                 
-                    util.mostrarMensaje("Hay campos requeridos sin diligenciar.");                
+                    util.mostrarMensaje("El participante no se pudo agregar.");                
             }            
         } catch (Exception e) {
             Logger.getLogger(UIConcurso.class.getName()).log(Level.SEVERE, null, e);
@@ -432,23 +432,20 @@ public class UIConcurso implements Serializable {
                     }
             
                 if(concurso.getCodConcurso()!=null){
-                    for(int i=0;i<=listaConcurso.size()-1;i++){
+                    for(int i=0;i<listaConcurso.size();i++){
                         if(concurso.getCodConcurso().equals(listaConcursoss.get(i).getCodConcurso())){                    
                             concurso.setNombre(listaConcursoss.get(i).getNombre());                        
                             concurso.setCodConcurso(listaConcursoss.get(i).getCodConcurso());
                             concurso.setEmpresa(listaConcursoss.get(i).getEmpresa());
                             concurso.setFecha_limite_insc(listaConcursoss.get(i).getFecha_limite_insc());
-                            concurso.setParticipantes(listaConcursoss.get(i).getParticipantes());                        
-                            concurso.setLogo(listaConcursoss.get(i).getLogo());
+                            concurso.setParticipantes(listaConcursoss.get(i).getParticipantes());                                                    
                         }
                     }
                 }
             
                 }
          catch (Exception e) {
-            Logger.getLogger(UIConcurso.class.getName()).log(Level.SEVERE, null, e);
-            util.mostrarMensaje(e.getMessage());
-            util.mostrarMensaje("!! La actividad no pudo ser almacenado !!");               
+            Logger.getLogger(UIConcurso.class.getName()).log(Level.SEVERE, null, e);            
         } 
         return listaGruposConcursos;
     }
@@ -714,13 +711,12 @@ public class UIConcurso implements Serializable {
                 for (int i = 0; i < listaConcursoss.size(); i++) {
                         listaConcursosEmpresas.add(new SelectItem(listaConcursoss.get(i).getCodConcurso(), listaConcursoss.get(i).getNombre(), listaConcursoss.get(i).getFecha_limite_insc().toString()));                        
                     }
+                    
                 
                 }
             catch (Exception ex) {                        
                     Logger.getLogger(UIConcurso.class.getName()).log(Level.SEVERE, null, ex);
-                }  
-            
-                           
+                }          
                 return listaConcursosEmpresas;                
                 
     }
@@ -954,32 +950,56 @@ public class UIConcurso implements Serializable {
         return listaSubEmpresasnit;
     }
     
-    /*public StreamedContent mostrarImagen(String nom){
-    ByteArrayOutputStream out=null;
-    InputStream logo=null;
-    out=traerArchivo(nom);
-    logo=new ByteArrayInputStream(out.toByteArray());
-    return new DefaultStreamedContent(logo);
-    }
-    public ByteArrayOutputStream traerArchivo(String ruta){
-    ByteArrayOutputStream out=null;
-    String path=ruta;
-    InputStream in=null;
-    try {
-    File remoteFile=new File(path);
-    in=new BufferedInputStream(new FileInputStream(remoteFile));
-    out=new  ByteArrayOutputStream((int) remoteFile.length());
-    byte[] buffer=new byte [4096];
-    int len=0;
-    while ((len=in.read(buffer,0,buffer.length))!=-1){
-    out.write(buffer,0,len);
-    }
-    out.flush();
-    } catch (Exception e) {
-    Logger.getLogger(UIConcurso.class.getName()).log(Level.SEVERE, null, e);
-    }
-    return out;
+   /*public StreamedContent mostrarImagen(String logonom){        
+        concurso= (Concurso) UtilJSF.getBean("varConcursos");
+        ByteArrayOutputStream out=null;        
+        InputStream logo=null;
+        
+        
+        if(!logonom.equals("")){
+            out=traerArchivo(concurso.getLogo(), logonom);
+            logo=new ByteArrayInputStream(out.toByteArray());
+            return new DefaultStreamedContent(logo);                        
+        }
+        if(logonom.equals("")){            
+            out=traerArchivo("C:\\Concursos\\COBIENESTAR - RIOSUCIO\\concurso2\\", "a.png");
+            logo=new ByteArrayInputStream(out.toByteArray());
+            return new DefaultStreamedContent(logo);                        
+        }        
+        else{        
+            out=traerArchivo("C:\\Concursos\\COBIENESTAR - RIOSUCIO\\concurso1\\", "logo.png");
+            logo=new ByteArrayInputStream(out.toByteArray());
+            return new DefaultStreamedContent(logo);                        
+        
+        }
+        
+        
     }*/
+    
+    public ByteArrayOutputStream traerArchivo(String ruta, String nom){
+        ByteArrayOutputStream out=null;
+        String path=ruta+nom;
+        
+        if(path.equals(null)){
+            out=new ByteArrayOutputStream();
+        }
+        InputStream in=null;
+        try {
+            File remoteFile=new File(path);
+            in=new BufferedInputStream(new FileInputStream(remoteFile));
+            out=new  ByteArrayOutputStream((int) remoteFile.length());
+            byte[] buffer=new byte [4096];
+            int len=0;
+            while ((len=in.read(buffer,0,buffer.length))!=-1){
+                out.write(buffer,0,len);
+            }
+        out.flush();
+        } catch (Exception e) {
+            Logger.getLogger(UIConcurso.class.getName()).log(Level.SEVERE, null, e);
+        }
+        return out;
+    }
+    
     public void setListaSubEmpresasnit(ArrayList<SubEmpresa> listaSubEmpresasnit) {
         this.listaSubEmpresasnit = listaSubEmpresasnit;
     }
@@ -1214,11 +1234,22 @@ public class UIConcurso implements Serializable {
     }
 
     public Concurso getConcurso() {
+        if(concurso == null){
+            concurso = new Concurso();
+        }
         return concurso;
     }
 
     public void setConcurso(Concurso concurso) {
         this.concurso = concurso;
+    }
+
+    public Date getHoy() {
+        return hoy;
+    }
+
+    public void setHoy(Date hoy) {
+        this.hoy = hoy;
     }
     
 }

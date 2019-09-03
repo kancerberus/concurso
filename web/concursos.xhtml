@@ -96,7 +96,7 @@ and open the template in the editor.
                                         </p:column>                                        
                                         <p:column width="6%" headerText="Actividad">
                                                 <p:commandButton id="openDialogLink"  icon="ui-icon-plus" value="Adjuntos" onclick="PF('dlg').show();" 
-                                                                 oncomplete="PF('dlg').show();"   >
+                                                                 oncomplete="PF('dlg').show();"  disabled="#{concursoBean.hoy > varActividadAdjuntos.fechaLimite}" >
                                                     <p:ajax update="@(.dlgAdjuntos)" listener="#{concursoBean.subirItemActividadAdjuntos()}"/>
                                                 </p:commandButton>
                                         </p:column>

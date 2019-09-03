@@ -45,7 +45,7 @@ and open the template in the editor.
                                     Concursos
                                     <p:selectOneMenu value="#{concursoBean.concurso.codConcurso}">
                                     <f:selectItem itemLabel="Seleccione..." itemValue="" />                                                
-                                    <f:selectItems   value="#{concursoBean.listaConcursosEmpresas}"/>                                      
+                                    <f:selectItems   value="#{concursoBean.listaConcursosEmpresas}" />                                      
                                     <p:ajax listener="#{concursoBean.getListaGruposConcursos}" update="fieldParticipantes,gruposConcurso"/>
                                     </p:selectOneMenu>
                                     Nombre Equipo
@@ -93,7 +93,7 @@ and open the template in the editor.
                                         <p:selectBooleanCheckbox id="capitan" value="#{concursoBean.grupoParticipantes.capitan}" disabled="#{concursoBean.captain eq true}">
                                             <p:ajax oncomplete="PF('dlg').show();"  listener="#{concursoBean.listGrupoParticipantess}"/>
                                         </p:selectBooleanCheckbox>
-                                        <p:commandButton icon="ui-icon-newwin" oncomplete="PF('dlg').show();" onclick="PF('dlg').show();" update="grupoParticipantes, capitan"
+                                        <p:commandButton icon="ui-icon-newwin" oncomplete="PF('dlg').show();" onclick="PF('dlg').show();" update="grupoParticipantes, capitan,avisoEquipos"
                                                 type="submit" value="Agregar"  actionListener="#{concursoBean.agregarEmpleado()}"/>
                                     </h:panelGrid>       
                                     

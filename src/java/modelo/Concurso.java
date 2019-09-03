@@ -24,17 +24,18 @@ public class Concurso implements Serializable{
     private Integer participantes;
     private boolean estado=true;
     private Date fecha_limite_insc;
-    private String logo;
-    private InputStream scontlogo;
+   
+    
+    
 
-    public Concurso(String codConcurso, String nombre, Empresa empresa, Integer participantes, boolean estado, Date fecha_limite_insc, String logo) {
+    public Concurso(String codConcurso, String nombre, Empresa empresa, Integer participantes, boolean estado, Date fecha_limite_insc) {
         this.codConcurso = codConcurso;
         this.nombre = nombre;
         this.empresa = empresa;
         this.participantes = participantes;
         this.estado = estado;
         this.fecha_limite_insc = fecha_limite_insc;
-        this.logo=logo;
+        
     }
 
     public Concurso(String codConcurso, String nombre, Integer participantes) {
@@ -49,25 +50,11 @@ public class Concurso implements Serializable{
 
     }  
 
-    public InputStream getScontlogo() {
-        return scontlogo;
-    }
-
-    public void setScontlogo(InputStream scontlogo) {
-        this.scontlogo = scontlogo;
-    }
+    
 
     public boolean isEstado() {
         return estado;
     } 
-
-    public String getLogo() {
-        return logo;
-    }
-
-    public void setLogo(String logo) {
-        this.logo = logo;
-    }
 
     public void setEstado(boolean estado) {
         this.estado = estado;

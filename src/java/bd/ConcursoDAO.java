@@ -182,7 +182,7 @@ public class ConcursoDAO {
             
             //Sentencia SQL para guardar el registro
                 String sql = "INSERT INTO campaña.concurso ("
-                        + " cod_concurso,fk_nitempresa, nombre, participantes, estado, fecha_limite_insc, logo) "                        
+                        + " cod_concurso,fk_nitempresa, nombre, participantes, estado, fecha_limite_insc, logo_nombre) "                        
                         + "VALUES ("
                         + "'" + concurso.getCodConcurso() +"',"
                         + "'" + concurso.getEmpresa().getNitempresa()+ "',"
@@ -190,7 +190,7 @@ public class ConcursoDAO {
                         + "'" + concurso.getParticipantes() + "',"
                         + "'" + concurso.isEstado() + "',"
                         + "'" + concurso.getFecha_limite_insc() + "',"
-                        + "'" + concurso.getLogo()+"/logo.png" + "')";
+                        + ")";
 
             resultado = consulta.actualizar(sql);
             return resultado;
@@ -421,7 +421,7 @@ public class ConcursoDAO {
         try {
             consulta = new Consulta(getConexion());
             String sql
-                    = " SELECT cod_concurso, conc.nombre nomconc, em.nombre nombre,fk_nitempresa, participantes, estado, fecha_limite_insc, logo " +
+                    = " SELECT cod_concurso, conc.nombre nomconc, em.nombre nombre,fk_nitempresa, participantes, estado, fecha_limite_insc " +
                         "FROM campaña.concurso conc " +
                         "JOIN empresa em on(em.nitempresa=conc.fk_nitempresa) " +
                         "ORDER BY cod_concurso";
@@ -435,7 +435,7 @@ public class ConcursoDAO {
                 concurso.setParticipantes(rs.getInt("participantes"));
                 concurso.setEstado(rs.getBoolean("estado"));
                 concurso.setFecha_limite_insc(rs.getDate("fecha_limite_insc"));
-                concurso.setEmpresa(new Empresa(rs.getString("fk_nitempresa"), rs.getString("nombre")));                
+                concurso.setEmpresa(new Empresa(rs.getString("fk_nitempresa"), rs.getString("nombre")));                                
                 listaConcursos.add(concurso);
             }
             return listaConcursos;
@@ -465,6 +465,31 @@ public class ConcursoDAO {
                 nitempresa=rs.getString("fk_nitempresa");
             }
             return nitempresa;
+
+        } catch (SQLException ex) {
+            throw ex;
+        } finally {
+            consulta.desconectar();
+        }
+    }
+    
+    public Integer cargarParticipantes(String codConcurso) throws SQLException {
+        Integer participantes=0;
+        ResultSet rs;
+        Consulta consulta = null;
+        try {
+            consulta = new Consulta(getConexion());
+            String sql
+                    = " SELECT participantes "
+                    + " from campaña.concurso "
+                    + " where cod_concurso='"+codConcurso+"'";
+
+            rs = consulta.ejecutar(sql);
+
+            while (rs.next()) {
+                participantes=rs.getInt("participantes");
+            }
+            return participantes;
 
         } catch (SQLException ex) {
             throw ex;
@@ -657,7 +682,7 @@ public class ConcursoDAO {
             
             consulta = new Consulta(getConexion());
             String sql
-                    = "  SELECT conc.cod_concurso, conc.nombre, conc.fk_nitempresa, participantes, estado, fecha_limite_insc, logo, emp.nombre nomem  " +
+                    = "  SELECT conc.cod_concurso, conc.nombre, conc.fk_nitempresa, participantes, estado, fecha_limite_insc, emp.nombre nomem  " +
                         " FROM campaña.concurso conc " +
                         " JOIN subempresa sub ON (sub.nitsubempresa=conc.fk_nitempresa) " +
                         " JOIN empresa emp ON(emp.nitempresa=sub.fk_nitempresa) " +
@@ -671,8 +696,7 @@ public class ConcursoDAO {
                 concurso.setNombre(dt.getString("nombre"));
                 concurso.setParticipantes(dt.getInt("participantes"));
                 concurso.setEstado(dt.getBoolean("estado"));
-                concurso.setFecha_limite_insc(dt.getDate("fecha_limite_insc"));
-                concurso.setLogo(dt.getString("logo"));
+                concurso.setFecha_limite_insc(dt.getDate("fecha_limite_insc"));                
                 concurso.setEmpresa(new Empresa(nit, dt.getString("nomem")));
                 
                 
@@ -782,7 +806,7 @@ public class ConcursoDAO {
                         " FROM campaña.actividad act " +
                         " JOIN campaña.concurso con on(con.cod_concurso=act.fk_cod_concurso) "+                        
                         " WHERE con.cod_concurso='"+codConcurso+"' " +
-                        " ORDER BY cod_actividad";
+                        " ORDER BY fecha_limite asc";
 
             rs = consulta.ejecutar(sql);
 
@@ -792,7 +816,7 @@ public class ConcursoDAO {
                 actividad.setNombre(rs.getString("nomact"));
                 actividad.setObservacion(rs.getString("observacion"));
                 actividad.setFechaLimite(rs.getDate("fecha_limite"));
-                actividad.setConcurso(new Concurso(rs.getString("codcon"), rs.getString("nomcon"), null, 0, false, null,""));
+                actividad.setConcurso(new Concurso(rs.getString("codcon"), rs.getString("nomcon"), null, 0, false, null));
                 listaActividades.add(actividad);
             }
             return listaActividades;
@@ -827,7 +851,7 @@ public class ConcursoDAO {
                 actividad.setNombre(rs.getString("nomact"));
                 actividad.setObservacion(rs.getString("observacion"));
                 actividad.setFechaLimite(rs.getDate("fecha_limite"));
-                actividad.setConcurso(new Concurso(rs.getString("codcon"), rs.getString("nomcon"), null, 0, false, null,""));
+                actividad.setConcurso(new Concurso(rs.getString("codcon"), rs.getString("nomcon"), null, 0, false, null));
                 listaActividades.add(actividad);
             }
             return listaActividades;

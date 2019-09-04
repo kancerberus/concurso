@@ -155,10 +155,8 @@ public class UIConcurso implements Serializable {
             if (invalido == false) {       
                     Long codConcurso=gestorConcurso.nextval(GestorConcurso.CAMPAÑA_CONCURSO_COD_CONCURSO_SEQ);
                     concurso.setCodConcurso(codConcurso.toString());
-                    concurso.getEmpresa().setNombre(gestorConcurso.cargarNombreEmpresa(empresa.getNitempresa()));
-                    
-                    
-                    
+                    concurso.getEmpresa().setNombre(gestorConcurso.cargarNombreEmpresa(empresa.getNitempresa()));                    
+                    concurso.setLogoDir("/resources/imagenes/logoConcursos/logo.png");
                     
                     
                     Integer resultado = gestorConcurso.guardarConcurso(concurso);
@@ -257,7 +255,7 @@ public class UIConcurso implements Serializable {
             for(int i=0;i<getListaGruposConcursos().size();i++){
                 if(grupoConcurso.getCodGrupo().equals(listaGrupoConcursoss.get(i).getCodGrupo())){
                     grupoConcurso.setSubempresa(new SubEmpresa(listaGrupoConcursoss.get(i).getSubempresa().getNitsubempresa(),listaGrupoConcursoss.get(i).getSubempresa().getNombre() ));
-                    grupoConcurso.setConcurso(new Concurso("", "", new Empresa(listaGrupoConcursoss.get(i).getConcurso().getEmpresa().getNitempresa(), listaGrupoConcursoss.get(i).getConcurso().getEmpresa().getNombre()) , null, true,null));
+                    grupoConcurso.setConcurso(new Concurso("", "", new Empresa(listaGrupoConcursoss.get(i).getConcurso().getEmpresa().getNitempresa(), listaGrupoConcursoss.get(i).getConcurso().getEmpresa().getNombre()) , null, true,null,"",null));
                     grupoConcurso.setNombre(listaGrupoConcursoss.get(i).getNombre());
                 }
             }
@@ -438,7 +436,8 @@ public class UIConcurso implements Serializable {
                             concurso.setCodConcurso(listaConcursoss.get(i).getCodConcurso());
                             concurso.setEmpresa(listaConcursoss.get(i).getEmpresa());
                             concurso.setFecha_limite_insc(listaConcursoss.get(i).getFecha_limite_insc());
-                            concurso.setParticipantes(listaConcursoss.get(i).getParticipantes());                                                    
+                            concurso.setParticipantes(listaConcursoss.get(i).getParticipantes());                        
+                            concurso.setLogoDir(listaConcursoss.get(i).getLogoDir());
                         }
                     }
                 }
@@ -711,7 +710,18 @@ public class UIConcurso implements Serializable {
                 for (int i = 0; i < listaConcursoss.size(); i++) {
                         listaConcursosEmpresas.add(new SelectItem(listaConcursoss.get(i).getCodConcurso(), listaConcursoss.get(i).getNombre(), listaConcursoss.get(i).getFecha_limite_insc().toString()));                        
                     }
-                    
+                    if(concurso.getCodConcurso()!=null){
+                    for(int i=0;i<listaConcurso.size();i++){
+                        if(concurso.getCodConcurso().equals(listaConcursoss.get(i).getCodConcurso())){                    
+                            concurso.setNombre(listaConcursoss.get(i).getNombre());                        
+                            concurso.setCodConcurso(listaConcursoss.get(i).getCodConcurso());
+                            concurso.setEmpresa(listaConcursoss.get(i).getEmpresa());
+                            concurso.setFecha_limite_insc(listaConcursoss.get(i).getFecha_limite_insc());
+                            concurso.setParticipantes(listaConcursoss.get(i).getParticipantes());                        
+                            concurso.setLogoDir(listaConcursoss.get(i).getLogoDir());
+                        }
+                    }
+                }
                 
                 }
             catch (Exception ex) {                        
@@ -830,6 +840,22 @@ public class UIConcurso implements Serializable {
         }
 
     }
+    
+    public void uploadLogo(FileUploadEvent event) throws Exception {
+        String msg=null;
+        try {            
+            
+            String ruta = "/resources/imagenes/logoConcursos/";
+            
+            gestorConcurso=new GestorConcurso();
+
+            UtilArchivo.guardarStream(ruta.trim() + File.separator + event.getFile().getFileName(), event.getFile().getInputstream());
+            this.file = event.getFile();
+            
+        } catch (IOException ex) {            
+        }
+
+    }
 
     public StreamedContent getFileDownload() {        
         try {                     
@@ -875,6 +901,7 @@ public class UIConcurso implements Serializable {
                         concurso.setFecha_limite_insc(listaConcursoss.get(i).getFecha_limite_insc());
                         concurso.setParticipantes(listaConcursoss.get(i).getParticipantes());
                         concurso.setNombre(listaConcursoss.get(i).getNombre());
+                        concurso.setLogoDir(listaConcursoss.get(i).getLogoDir());
                         this.getListaGrupoConcurso();                        
                         }
                     }
@@ -912,32 +939,7 @@ public class UIConcurso implements Serializable {
             Logger.getLogger(UIConcurso.class.getName()).log(Level.SEVERE, null, e);
         }
     }
-    
-    public void uploadLogo(FileUploadEvent event) throws Exception {
-        String msg=null;
-        try {            
-            this.getConcurso();
-            gestorConcurso=new GestorConcurso();
-            
-            String ruta = "C:/Concursos/"+concurso.getEmpresa().getNombre()+"/"+
-                    concurso.getNombre();
-            
-            //gestorConcurso.guardarLogo(file, concurso, ruta);
-            
-            
-            File carpeta = new File(ruta);
-            if (!carpeta.exists()) {
-                carpeta.mkdirs();
-            }
-                       
-            UtilArchivo.guardarStream(ruta + File.separator + event.getFile().getFileName(), event.getFile().getInputstream());
-            this.file = event.getFile();
-            
-        } catch (IOException ex) {            
-        }
-
-    }
-
+        
     public ArrayList<GrupoConcurso> getListTablaPosiciones() {
         return listTablaPosiciones;
     }
@@ -948,56 +950,6 @@ public class UIConcurso implements Serializable {
 
     public ArrayList<SubEmpresa> getListaSubEmpresasnit() {        
         return listaSubEmpresasnit;
-    }
-    
-   /*public StreamedContent mostrarImagen(String logonom){        
-        concurso= (Concurso) UtilJSF.getBean("varConcursos");
-        ByteArrayOutputStream out=null;        
-        InputStream logo=null;
-        
-        
-        if(!logonom.equals("")){
-            out=traerArchivo(concurso.getLogo(), logonom);
-            logo=new ByteArrayInputStream(out.toByteArray());
-            return new DefaultStreamedContent(logo);                        
-        }
-        if(logonom.equals("")){            
-            out=traerArchivo("C:\\Concursos\\COBIENESTAR - RIOSUCIO\\concurso2\\", "a.png");
-            logo=new ByteArrayInputStream(out.toByteArray());
-            return new DefaultStreamedContent(logo);                        
-        }        
-        else{        
-            out=traerArchivo("C:\\Concursos\\COBIENESTAR - RIOSUCIO\\concurso1\\", "logo.png");
-            logo=new ByteArrayInputStream(out.toByteArray());
-            return new DefaultStreamedContent(logo);                        
-        
-        }
-        
-        
-    }*/
-    
-    public ByteArrayOutputStream traerArchivo(String ruta, String nom){
-        ByteArrayOutputStream out=null;
-        String path=ruta+nom;
-        
-        if(path.equals(null)){
-            out=new ByteArrayOutputStream();
-        }
-        InputStream in=null;
-        try {
-            File remoteFile=new File(path);
-            in=new BufferedInputStream(new FileInputStream(remoteFile));
-            out=new  ByteArrayOutputStream((int) remoteFile.length());
-            byte[] buffer=new byte [4096];
-            int len=0;
-            while ((len=in.read(buffer,0,buffer.length))!=-1){
-                out.write(buffer,0,len);
-            }
-        out.flush();
-        } catch (Exception e) {
-            Logger.getLogger(UIConcurso.class.getName()).log(Level.SEVERE, null, e);
-        }
-        return out;
     }
     
     public void setListaSubEmpresasnit(ArrayList<SubEmpresa> listaSubEmpresasnit) {

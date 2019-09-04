@@ -47,7 +47,7 @@ and open the template in the editor.
                                     <p:selectOneMenu value="#{concursoBean.concurso.codConcurso}">
                                     <f:selectItem itemLabel="Seleccione..." itemValue="" />                                                
                                     <f:selectItems   value="#{concursoBean.listaConcursosEmpresas}" />
-                                    <p:ajax update="@(.gridBasesConcurso), @(.pnlConcursos), gConcursos " listener="#{concursoBean.getListaGruposConcursos}" />                                    
+                                    <p:ajax update="@(.gridBasesConcurso), @(.pnlConcursos), gConcursos,logo " listener="#{concursoBean.getListaGruposConcursos}" />                                    
                                     </p:selectOneMenu>
                                     Equipos: *
                                     <p:selectOneMenu id="gConcursos" value="#{concursoBean.grupoConcurso.codGrupo}">
@@ -57,6 +57,8 @@ and open the template in the editor.
                                     </p:selectOneMenu>                                    
                                     Calificacion Acumulada
                                     <p:outputLabel id="acum" style="font-size: 15px;font-weight: bolder; color: darkgreen" value="#{concursoBean.puntajeAcum}"/>
+                                    <p:outputLabel value="     "/>
+                                    <p:graphicImage id="logo" value="#{concursoBean.concurso.logoDir}" style="margin-left: 25%" width="80" height="30" cache="false"/>
                                 </p:fieldset>  
                                 <p:fieldset styleClass="gridBasesConcurso" legend="Bases De Concurso" style="margin-bottom:10px; margin-top:10px;" >
                                 <table cellpadding="5">                        

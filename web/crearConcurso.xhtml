@@ -19,7 +19,7 @@ and open the template in the editor.
                <p:growl id="avisoConcurso" showDetail="true" life="5000" />
                 <p:panel header="CONCURSO" id="pnlConcurso"  
                          style="width:1080px;">
-                    <h:panelGroup id="avisoConcursoup">
+                    <h:panelGroup id="avisoJueces">
                     <table>
                         <tr><td>
                             <p:fieldset legend="Datos de Inicio de Sesión" style="margin-bottom:10px; margin-top:10px;" >
@@ -62,8 +62,10 @@ and open the template in the editor.
                                     Fecha Limite Inscripcion
                                     <p:calendar value="#{concursoBean.concurso.fecha_limite_insc}" />
                                     
-                                    <p:commandButton icon="ui-icon-newwin" update="avisoConcurso, concursos"
-                                            type="submit" value="Generar"  actionListener="#{concursoBean.crearConcurso()}"/>
+                                    <p:commandButton icon="ui-icon-newwin" type="submit" value="Generar" 
+                                                     actionListener="#{concursoBean.crearConcurso()}" update="avisoConcurso, concursos"/>
+                                    
+                                        
                                 </h:panelGrid>   
                                 
                                 
@@ -74,8 +76,9 @@ and open the template in the editor.
                                     <p:dataTable id="concursos" var="varConcursos" value="#{concursoBean.listaConcursoss}"
                                         rowStyleClass="letra-xx-small-centro" style="font-size: 10px;width: 100%">
                                         <p:column headerText="Logo" style="font-weight: bolder">                                            
-                                            
-                                            
+                                            <p:graphicImage  value="#{varConcursos.logoDir}" width="100" height="25" cache="false"/>
+                                            <h:graphicImage style="margin-right: 33%" url="/resources/imagenes/logoConcursos/logo.png" width="20%" 
+                                                            rendered="#{empty varConcursos.logoDir}"/>
                                         </p:column>                                        
                                         <p:column headerText="Empresa" style="font-weight: bolder">
                                             <h:outputText value="#{varConcursos.empresa.nombre}"/>

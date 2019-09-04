@@ -182,7 +182,7 @@ public class ConcursoDAO {
             
             //Sentencia SQL para guardar el registro
                 String sql = "INSERT INTO campaña.concurso ("
-                        + " cod_concurso,fk_nitempresa, nombre, participantes, estado, fecha_limite_insc, logo_nombre) "                        
+                        + " cod_concurso,fk_nitempresa, nombre, participantes, estado, fecha_limite_insc, logo_direccion) "                        
                         + "VALUES ("
                         + "'" + concurso.getCodConcurso() +"',"
                         + "'" + concurso.getEmpresa().getNitempresa()+ "',"
@@ -190,7 +190,7 @@ public class ConcursoDAO {
                         + "'" + concurso.getParticipantes() + "',"
                         + "'" + concurso.isEstado() + "',"
                         + "'" + concurso.getFecha_limite_insc() + "',"
-                        + ")";
+                        + "'" + concurso.getLogoDir()+ "')";
 
             resultado = consulta.actualizar(sql);
             return resultado;
@@ -421,7 +421,7 @@ public class ConcursoDAO {
         try {
             consulta = new Consulta(getConexion());
             String sql
-                    = " SELECT cod_concurso, conc.nombre nomconc, em.nombre nombre,fk_nitempresa, participantes, estado, fecha_limite_insc " +
+                    = " SELECT cod_concurso, conc.nombre nomconc, em.nombre nombre,fk_nitempresa, participantes, estado, fecha_limite_insc, logo_direccion " +
                         "FROM campaña.concurso conc " +
                         "JOIN empresa em on(em.nitempresa=conc.fk_nitempresa) " +
                         "ORDER BY cod_concurso";
@@ -435,7 +435,8 @@ public class ConcursoDAO {
                 concurso.setParticipantes(rs.getInt("participantes"));
                 concurso.setEstado(rs.getBoolean("estado"));
                 concurso.setFecha_limite_insc(rs.getDate("fecha_limite_insc"));
-                concurso.setEmpresa(new Empresa(rs.getString("fk_nitempresa"), rs.getString("nombre")));                                
+                concurso.setEmpresa(new Empresa(rs.getString("fk_nitempresa"), rs.getString("nombre")));                
+                concurso.setLogoDir(rs.getString("logo_direccion"));                
                 listaConcursos.add(concurso);
             }
             return listaConcursos;
@@ -682,7 +683,7 @@ public class ConcursoDAO {
             
             consulta = new Consulta(getConexion());
             String sql
-                    = "  SELECT conc.cod_concurso, conc.nombre, conc.fk_nitempresa, participantes, estado, fecha_limite_insc, emp.nombre nomem  " +
+                    = "  SELECT conc.cod_concurso, conc.nombre, conc.fk_nitempresa, participantes, estado, fecha_limite_insc, logo_direccion, emp.nombre nomem  " +
                         " FROM campaña.concurso conc " +
                         " JOIN subempresa sub ON (sub.nitsubempresa=conc.fk_nitempresa) " +
                         " JOIN empresa emp ON(emp.nitempresa=sub.fk_nitempresa) " +
@@ -696,7 +697,8 @@ public class ConcursoDAO {
                 concurso.setNombre(dt.getString("nombre"));
                 concurso.setParticipantes(dt.getInt("participantes"));
                 concurso.setEstado(dt.getBoolean("estado"));
-                concurso.setFecha_limite_insc(dt.getDate("fecha_limite_insc"));                
+                concurso.setFecha_limite_insc(dt.getDate("fecha_limite_insc"));
+                concurso.setLogoDir(dt.getString("logo_direccion"));                
                 concurso.setEmpresa(new Empresa(nit, dt.getString("nomem")));
                 
                 
@@ -816,7 +818,7 @@ public class ConcursoDAO {
                 actividad.setNombre(rs.getString("nomact"));
                 actividad.setObservacion(rs.getString("observacion"));
                 actividad.setFechaLimite(rs.getDate("fecha_limite"));
-                actividad.setConcurso(new Concurso(rs.getString("codcon"), rs.getString("nomcon"), null, 0, false, null));
+                actividad.setConcurso(new Concurso(rs.getString("codcon"), rs.getString("nomcon"), null, 0, false, null,"", null));
                 listaActividades.add(actividad);
             }
             return listaActividades;
@@ -851,7 +853,7 @@ public class ConcursoDAO {
                 actividad.setNombre(rs.getString("nomact"));
                 actividad.setObservacion(rs.getString("observacion"));
                 actividad.setFechaLimite(rs.getDate("fecha_limite"));
-                actividad.setConcurso(new Concurso(rs.getString("codcon"), rs.getString("nomcon"), null, 0, false, null));
+                actividad.setConcurso(new Concurso(rs.getString("codcon"), rs.getString("nomcon"), null, 0, false, null,"",null));
                 listaActividades.add(actividad);
             }
             return listaActividades;

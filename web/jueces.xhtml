@@ -19,8 +19,9 @@ and open the template in the editor.
                <p:growl id="aviso" showDetail="true" life="5000" />
                 <p:panel header="CALIFICACION JUECES" id="pnlJueces"  
                          style="width:auto;">
+                    <h:panelGroup id="avisoConcursoup">
                     <table>
-                                                      
+                        <tr><td>
                             <p:fieldset legend="Datos de Inicio de Sesión" style="margin-bottom:10px; margin-top:10px;" >
                                 <table cellpadding="5">                        
                                     <tr>
@@ -51,10 +52,10 @@ and open the template in the editor.
                                     </p:selectOneMenu>
                                     
                                     Concursos: *
-                                    <p:selectOneMenu styleClass="gConcursos" value="#{concursoBean.concurso.codConcurso}" valueChangeListener="#{concursoBean.getListConcursosSubempresa}">
+                                    <p:selectOneMenu styleClass="gConcursos" value="#{concursoBean.concurso.codConcurso}" valueChangeListener="#{concursoBean.getListConcursosSubempresa}" >
                                     <f:selectItem itemLabel="Seleccione..." itemValue="" />                                                
                                     <f:selectItems   value="#{concursoBean.listConcursosSubempresa}" />
-                                    <f:ajax event="change" render="gEquipos" listener="#{concursoBean.getListaGrupoConcurso}"/>
+                                    <f:ajax event="change" render="gEquipos" listener="#{concursoBean.getListaGrupoConcurso}"/>                                    
                                     </p:selectOneMenu>
                                     
                                     Equipos: *
@@ -64,7 +65,7 @@ and open the template in the editor.
                                     <p:ajax update="@(.actividadesEquipo),@(.gConcursos)" listener="#{concursoBean.cargarCalificacionesJueces()}"/>
                                     </p:selectOneMenu>
                                     
-                                    
+                                    <p:graphicImage style="margin-left: 300%" styleClass="logo" value="#{concursoBean.concurso.logoDir}" width="80" height="30" cache="false"/>                                    
                             </p:fieldset>
                                 
                             <p:fieldset legend="Actividades Equipo" style="margin-bottom:10px; margin-top:10px;" >                                    
@@ -143,9 +144,10 @@ and open the template in the editor.
                                 
                                 
                                 </p:dialog>
-                           
-                           
+                           </td>
+                           </tr>
                     </table> 
+                        </h:panelGroup>
                 </p:panel>                                                
             </h:form>
         </ui:composition>

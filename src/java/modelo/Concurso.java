@@ -23,19 +23,18 @@ public class Concurso implements Serializable{
     private Empresa empresa;
     private Integer participantes;
     private boolean estado=true;
-    private Date fecha_limite_insc;
-   
-    
+    private Date fecha_limite_insc;    
+    private String logoDir;
     
 
-    public Concurso(String codConcurso, String nombre, Empresa empresa, Integer participantes, boolean estado, Date fecha_limite_insc) {
+    public Concurso(String codConcurso, String nombre, Empresa empresa, Integer participantes, boolean estado, Date fecha_limite_insc, String logoNom, String logoDir) {
         this.codConcurso = codConcurso;
         this.nombre = nombre;
         this.empresa = empresa;
         this.participantes = participantes;
         this.estado = estado;
-        this.fecha_limite_insc = fecha_limite_insc;
-        
+        this.fecha_limite_insc = fecha_limite_insc;        
+        this.logoDir=logoDir;
     }
 
     public Concurso(String codConcurso, String nombre, Integer participantes) {
@@ -51,6 +50,14 @@ public class Concurso implements Serializable{
     }  
 
     
+
+    public String getLogoDir() {
+        return logoDir;
+    }
+
+    public void setLogoDir(String logoDir) {
+        this.logoDir = logoDir;
+    }
 
     public boolean isEstado() {
         return estado;

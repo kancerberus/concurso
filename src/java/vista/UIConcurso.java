@@ -557,6 +557,19 @@ public class UIConcurso implements Serializable {
             listCalificacionesActividadJueces=new ArrayList<>();
             gestorConcurso=new GestorConcurso();
             
+            if(concurso.getCodConcurso()!=null){
+                    for(int i=0;i<listaConcurso.size();i++){
+                        if(concurso.getCodConcurso().equals(listaConcursoss.get(i).getCodConcurso())){                    
+                            concurso.setNombre(listaConcursoss.get(i).getNombre());                        
+                            concurso.setCodConcurso(listaConcursoss.get(i).getCodConcurso());
+                            concurso.setEmpresa(listaConcursoss.get(i).getEmpresa());
+                            concurso.setFecha_limite_insc(listaConcursoss.get(i).getFecha_limite_insc());
+                            concurso.setParticipantes(listaConcursoss.get(i).getParticipantes());                        
+                            concurso.setLogoDir(listaConcursoss.get(i).getLogoDir());
+                        }
+                    }
+                }
+            
             listCalificacionesActividadJueces.addAll(gestorConcurso.cargarLIstaCalificacionesEquipo(grupoConcurso.getCodGrupo()));
             
             for(int i=0; i<listCalificacionesActividadJueces.size();i++){
@@ -571,7 +584,7 @@ public class UIConcurso implements Serializable {
     
     public void cargarTablaPosiciones(){
         try {
-            
+            getListaConcursosEmpresas();
             listTablaPosiciones=new ArrayList<>();            
             gestorConcurso=new GestorConcurso();
             
@@ -691,8 +704,7 @@ public class UIConcurso implements Serializable {
             
             try {
                 this.listaConcursosEmpresas= new ArrayList<>();
-                grupoConcurso=new GrupoConcurso();
-                concurso=new Concurso();
+                grupoConcurso=new GrupoConcurso();                
                 listActividadess=new ArrayList<>();
                 gestorConcurso = new GestorConcurso();
                 contextoJSF = FacesContext.getCurrentInstance();
@@ -801,7 +813,10 @@ public class UIConcurso implements Serializable {
                 for (int i = 0; i < listaGrupoConcursoss.size(); i++) {                    
                         listGruposConcurso.add(new SelectItem(listaGrupoConcursoss.get(i).getCodGrupo(), listaGrupoConcursoss.get(i).getNombre()));
                     }
+                getListConcursosSubempresa();
                 }
+            
+            
             catch (Exception ex) {
                  Logger.getLogger(UIConcurso.class.getName()).log(Level.SEVERE, null, ex);       
                 }
@@ -880,7 +895,7 @@ public class UIConcurso implements Serializable {
     public ArrayList<SelectItem> getListConcursosSubempresa() {
         try {                            
             
-                concurso=new Concurso();
+                
                 gestorConcurso = new GestorConcurso();                
                 listActividadess=new ArrayList<>();
                 
@@ -891,21 +906,8 @@ public class UIConcurso implements Serializable {
                 
                 for (int i = 0; i < listaConcursoss.size(); i++) {
                         listConcursosSubempresa.add(new SelectItem(listaConcursoss.get(i).getCodConcurso(), listaConcursoss.get(i).getNombre(), listaConcursoss.get(i).getFecha_limite_insc().toString()));                        
-                    }
-                
-                if(concurso.getCodConcurso()!=null){
-                    for(int i=0;i<=listaConcurso.size()-1;i++){
-                        if(concurso.getCodConcurso().equals(listaConcursoss.get(i).getCodConcurso())){                    
-                        concurso.setCodConcurso(listaConcursoss.get(i).getCodConcurso());
-                        concurso.setEmpresa(listaConcursoss.get(i).getEmpresa());
-                        concurso.setFecha_limite_insc(listaConcursoss.get(i).getFecha_limite_insc());
-                        concurso.setParticipantes(listaConcursoss.get(i).getParticipantes());
-                        concurso.setNombre(listaConcursoss.get(i).getNombre());
-                        concurso.setLogoDir(listaConcursoss.get(i).getLogoDir());
-                        this.getListaGrupoConcurso();                        
-                        }
-                    }
-                } 
+                    }              
+                 
                 
                 }
             catch (Exception e) {                        

@@ -48,8 +48,9 @@ and open the template in the editor.
                                 <p:selectOneMenu value="#{concursoBean.concurso.codConcurso}">
                                 <f:selectItem itemLabel="Seleccione..." itemValue="" />                                                
                                 <f:selectItems   value="#{concursoBean.listaConcursosEmpresas}" />
-                                <p:ajax update=" @(.pnltabPosiciones), dtPosiciones " listener="#{concursoBean.cargarTablaPosiciones()}" />
+                                <p:ajax update=" @(.pnltabPosiciones), dtPosiciones, logo" listener="#{concursoBean.cargarTablaPosiciones()}" />
                                 </p:selectOneMenu>                                    
+                                <p:graphicImage id="logo" value="#{concursoBean.concurso.logoDir}" style="margin-left: 25%" width="80" height="30" cache="false"/>
                             </p:fieldset>  
                             <p:fieldset legend="POSICIONES" style="margin-bottom:10px; margin-top:10px;" >
                                 <p:dataTable id="dtPosiciones" var="varPosiciones" value="#{concursoBean.listTablaPosiciones}"

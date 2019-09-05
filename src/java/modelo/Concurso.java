@@ -47,9 +47,7 @@ public class Concurso implements Serializable{
 
     public Concurso() {
 
-    }  
-
-    
+    }      
 
     public String getLogoDir() {
         return logoDir;

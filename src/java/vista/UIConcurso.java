@@ -213,11 +213,11 @@ public class UIConcurso implements Serializable {
             }
             concurso.getEmpresa();
             hoy=sumarDia(hoy, 1);
-            if (concurso.getFecha_limite_insc().after(hoy)) {
+            if (concurso.getFecha_limite_insc().before(hoy)) {
                 util.mostrarMensaje("Fecha Limite De inscripcion! "+concurso.getFecha_limite_insc());                
                 concurso=new Concurso();
                 this.getListaConcursosEmpresas();                       
-                invalido = true;              
+                invalido = true;
             }
          
 
@@ -270,8 +270,8 @@ public class UIConcurso implements Serializable {
             Date h=sumarDia(hoy, 1);
             hoy=h;
             if (actividad.getFechaLimite().after(hoy)) {
-                util.mostrarMensaje("Subir evidencias hasta! "+actividad.getFechaLimite());                
-                invalido = true;   
+                util.mostrarMensaje("Subir evidencias hasta! "+actividad.getFechaLimite());
+                invalido = true;
                 cargaEvidencias =true;
             }
             

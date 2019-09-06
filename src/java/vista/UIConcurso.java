@@ -18,7 +18,9 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.Serializable;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -75,8 +77,7 @@ public class UIConcurso implements Serializable {
     private UploadedFile file;  
     private StreamedContent fileDownload;
     private Date hoy=new Date();
-    
-    
+    private Boolean cargaEvidencias=false; 
     
     private ArrayList<SelectItem> listActividades=new ArrayList<>();
     private ArrayList<Actividad> listActividadess=new ArrayList<>();
@@ -120,10 +121,12 @@ public class UIConcurso implements Serializable {
        listCalificacionesActividadJueces=new ArrayList<>();
        subempresa=new SubEmpresa();
        calificacionActividad=new CalificacionActividad();
-       this.limpiarActividad();
+       this.limpiarActividad();              
        
     }  
     
+    
+     
     @PostConstruct
     public void init() {
         try {            
@@ -178,6 +181,14 @@ public class UIConcurso implements Serializable {
             util.mostrarMensaje("!! El concurso no pudo ser almacenado !!");               
         }
     }     
+    
+    public Date sumarDia(Date fecha, int dias){
+        Calendar cal=Calendar.getInstance();
+        cal.setTime(fecha);
+        cal.add(Calendar.DAY_OF_YEAR, dias);
+        return cal.getTime();
+        
+    }
 
     public void crearGrupoConcurso() throws Exception{        
         Boolean invalido = false;
@@ -201,8 +212,9 @@ public class UIConcurso implements Serializable {
                 invalido = true;              
             }
             concurso.getEmpresa();
-            if (hoy.after(concurso.getFecha_limite_insc())) {
-                util.mostrarMensaje("Fecha Limite De inscripcion Vencida!");                
+            hoy=sumarDia(hoy, 1);
+            if (concurso.getFecha_limite_insc().after(hoy)) {
+                util.mostrarMensaje("Fecha Limite De inscripcion! "+concurso.getFecha_limite_insc());                
                 concurso=new Concurso();
                 this.getListaConcursosEmpresas();                       
                 invalido = true;              
@@ -250,17 +262,33 @@ public class UIConcurso implements Serializable {
     }          
     
     public void subirItemActividadAdjuntos() {    
+        boolean invalido=false;
+        hoy=new Date();
         try {
             actividad= (Actividad) UtilJSF.getBean("varActividadAdjuntos");         
-            for(int i=0;i<getListaGruposConcursos().size();i++){
-                if(grupoConcurso.getCodGrupo().equals(listaGrupoConcursoss.get(i).getCodGrupo())){
-                    grupoConcurso.setSubempresa(new SubEmpresa(listaGrupoConcursoss.get(i).getSubempresa().getNitsubempresa(),listaGrupoConcursoss.get(i).getSubempresa().getNombre() ));
-                    grupoConcurso.setConcurso(new Concurso("", "", new Empresa(listaGrupoConcursoss.get(i).getConcurso().getEmpresa().getNitempresa(), listaGrupoConcursoss.get(i).getConcurso().getEmpresa().getNombre()) , null, true,null,"",null));
-                    grupoConcurso.setNombre(listaGrupoConcursoss.get(i).getNombre());
-                }
+            
+            Date h=sumarDia(hoy, 1);
+            hoy=h;
+            if (actividad.getFechaLimite().after(hoy)) {
+                util.mostrarMensaje("Subir evidencias hasta! "+actividad.getFechaLimite());                
+                invalido = true;   
+                cargaEvidencias =true;
             }
-            actividad.setGrupoConcurso(grupoConcurso);
-            this.cargarAdjuntos();
+            
+            if(invalido==false){
+                
+                for(int i=0;i<getListaGruposConcursos().size();i++){
+                    if(grupoConcurso.getCodGrupo().equals(listaGrupoConcursoss.get(i).getCodGrupo())){
+                        grupoConcurso.setSubempresa(new SubEmpresa(listaGrupoConcursoss.get(i).getSubempresa().getNitsubempresa(),listaGrupoConcursoss.get(i).getSubempresa().getNombre() ));
+                        grupoConcurso.setConcurso(new Concurso("", "", new Empresa(listaGrupoConcursoss.get(i).getConcurso().getEmpresa().getNitempresa(), listaGrupoConcursoss.get(i).getConcurso().getEmpresa().getNombre()) , null, true,null,"",null));
+                        grupoConcurso.setNombre(listaGrupoConcursoss.get(i).getNombre());
+                    }
+                }
+                actividad.setGrupoConcurso(grupoConcurso);
+                this.cargarAdjuntos();
+            }
+            
+            
         
         } catch (Exception e) {
             Logger.getLogger(UIConcurso.class.getName()).log(Level.SEVERE, null, e);
@@ -345,7 +373,6 @@ public class UIConcurso implements Serializable {
     public void agregarEmpleado() throws Exception{        
         Boolean invalido = false;
         String msg = null;        
-        Date hoy=new Date();        
         
         try {            
             
@@ -986,6 +1013,15 @@ public class UIConcurso implements Serializable {
         return listaAdjuntos;
     }
 
+    public Boolean getCargaEvidencias() {
+        return cargaEvidencias;
+    }
+
+    public void setCargaEvidencias(Boolean cargaEvidencias) {
+        this.cargaEvidencias = cargaEvidencias;
+    }
+
+
     public void setListaAdjuntos(ArrayList<AdjuntosActividad> listaAdjuntos) {
         this.listaAdjuntos = listaAdjuntos;
     }
@@ -1202,7 +1238,7 @@ public class UIConcurso implements Serializable {
         return hoy;
     }
 
-    public void setHoy(Date hoy) {
+    public void setHoy(Date hoy) {        
         this.hoy = hoy;
     }
     

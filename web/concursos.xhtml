@@ -98,7 +98,7 @@ and open the template in the editor.
                                         </p:column>                                        
                                         <p:column width="6%" headerText="Actividad">
                                                 <p:commandButton id="openDialogLink"  icon="ui-icon-plus" value="Adjuntos" onclick="PF('dlg').show();" 
-                                                                 oncomplete="PF('dlg').show();"  disabled="#{concursoBean.hoy > varActividadAdjuntos.fechaLimite}" >
+                                                                 oncomplete="PF('dlg').show();"  >
                                                     <p:ajax update="@(.dlgAdjuntos)" listener="#{concursoBean.subirItemActividadAdjuntos()}"/>
                                                 </p:commandButton>
                                         </p:column>
@@ -112,8 +112,8 @@ and open the template in the editor.
                                 <h:panelGrid width="100%" columns="1" >                                        
                                         <p:column>
                                             <p:outputLabel value="Adjunto: "/>                                            
-                                                <p:fileUpload fileUploadListener="#{concursoBean.upload}" mode="advanced" dragDropSupport="false"
-                                            auto="true" update="adjuntos" fileLimit="5"  />
+                                            <p:fileUpload fileUploadListener="#{concursoBean.upload}" mode="advanced" dragDropSupport="false" label="Cargar"
+                                                              auto="true" update="adjuntos" fileLimit="5" disabled="#{concursoBean.cargaEvidencias eq true}"/>
                                         </p:column>
                                     <p:column>
                                         <p:commandButton icon="ui-icon-trash">

@@ -804,7 +804,7 @@ public class ConcursoDAO {
         try {
             consulta = new Consulta(getConexion());
             String sql
-                    = " SELECT cod_actividad, act.nombre nomact , observacion,fecha_limite, con.cod_concurso codcon, con.nombre nomcon "+                   
+                    = " SELECT cod_actividad, act.nombre nomact , observacion, fecha_limite, con.cod_concurso codcon, con.nombre nomcon "+                   
                         " FROM campaña.actividad act " +
                         " JOIN campaña.concurso con on(con.cod_concurso=act.fk_cod_concurso) "+                        
                         " WHERE con.cod_concurso='"+codConcurso+"' " +

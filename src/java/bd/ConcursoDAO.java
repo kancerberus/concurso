@@ -357,7 +357,7 @@ public class ConcursoDAO {
             consulta = new Consulta(this.conexion);
             StringBuilder sql = new StringBuilder("select nombre "
                     + " from campaña.grupo_concurso "
-                    + " where nombre='"+nombre+"' and cod_concurso='"+codConcurso+"'");
+                    + " where nombre='"+nombre.trim()+"' and cod_concurso='"+codConcurso+"'");
             rs = consulta.ejecutar(sql);  
             if (rs.next()){
                 existe=rs.getString("nombre");
@@ -390,7 +390,7 @@ public class ConcursoDAO {
                         + "VALUES ("
                         + "'" + grupoConcurso.getCodGrupo() + "', "                        
                         + "'" + grupoConcurso.getConcurso().getCodConcurso()+ "',"
-                        + "'" + grupoConcurso.getNombre() + "', "
+                        + "'" + grupoConcurso.getNombre().trim() + "', "
                         + "'" + grupoConcurso.getSubempresa().getNitsubempresa()+ "'"
                         + " )";
 

@@ -934,7 +934,7 @@ public class UIConcurso implements Serializable {
     public ArrayList<SelectItem> getListConcursosSubempresa() {
         try {                            
             
-                
+                concurso=new Concurso();
                 gestorConcurso = new GestorConcurso();                
                 listActividadess=new ArrayList<>();
                 

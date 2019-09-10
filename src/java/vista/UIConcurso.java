@@ -222,7 +222,7 @@ public class UIConcurso implements Serializable {
             
             if (!grupoConcurso.getNombre().equals("")) {                
                 String existe=gestorConcurso.buscarNombreEquipo(grupoConcurso.getNombre(), grupoConcurso.getConcurso().getCodConcurso());                                
-                if(existe.equals(grupoConcurso.getNombre())){
+                if(existe.equals(grupoConcurso.getNombre().trim().toUpperCase())){
                     invalido = true;              
                     util.mostrarMensaje("El nombre ya esta en uso!");
                 }                
@@ -820,11 +820,12 @@ public class UIConcurso implements Serializable {
             gestorConcurso = new GestorConcurso();
             
             String nitsesion = (String) ef.createValueExpression(contextoEL, "#{loginBean.sesion.usuario.subEmpresa.nitsubempresa}", String.class).getValue(contextoEL);                                    
+            Integer codperfil = (Integer) ef.createValueExpression(contextoEL, "#{loginBean.sesion.usuario.perfil.codigo}", Integer.class).getValue(contextoEL);        
             
             String nitem=gestorConcurso.cargarNitEmpresa(nitsesion);  
             
             listaSubEmpresasnit=new ArrayList<>();
-            listaSubEmpresasnit=gestorConcurso.cargarListaSubempresas(nitem);
+            listaSubEmpresasnit=gestorConcurso.cargarListaSubempresas(nitem, codperfil);
             listaSubEmpresas.clear();              
             
             

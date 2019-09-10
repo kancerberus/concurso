@@ -357,7 +357,7 @@ public class ConcursoDAO {
             consulta = new Consulta(this.conexion);
             StringBuilder sql = new StringBuilder("select nombre "
                     + " from campaña.grupo_concurso "
-                    + " where nombre='"+nombre.trim()+"' and cod_concurso='"+codConcurso+"'");
+                    + " where nombre='"+nombre.trim().toUpperCase()+"' and cod_concurso='"+codConcurso+"'");
             rs = consulta.ejecutar(sql);  
             if (rs.next()){
                 existe=rs.getString("nombre");
@@ -390,7 +390,7 @@ public class ConcursoDAO {
                         + "VALUES ("
                         + "'" + grupoConcurso.getCodGrupo() + "', "                        
                         + "'" + grupoConcurso.getConcurso().getCodConcurso()+ "',"
-                        + "'" + grupoConcurso.getNombre().trim() + "', "
+                        + "'" + grupoConcurso.getNombre().trim().toUpperCase() + "', "
                         + "'" + grupoConcurso.getSubempresa().getNitsubempresa()+ "'"
                         + " )";
 
@@ -988,28 +988,51 @@ public class ConcursoDAO {
         }
     }
     
-    public ArrayList<SubEmpresa> cargarListaSubempresas(String nitem) throws SQLException {
+    public ArrayList<SubEmpresa> cargarListaSubempresas(String nitem, Integer codPerfil) throws SQLException {
+        
         SubEmpresa subempresas;
         ArrayList<SubEmpresa> listaSubempresas=new ArrayList<>();
         ResultSet rs;
         Consulta consulta = null;
         try {
-            consulta = new Consulta(getConexion());
-            String sql
-                    = " select nombre, nitsubempresa"
-                    + " from subempresa "
-                    + " where fk_nitempresa='"+nitem+"'";
+            if(codPerfil==1){
+                consulta = new Consulta(getConexion());
+                String sql
+                        = " select nombre, nitsubempresa"
+                        + " from subempresa ";
 
-            rs = consulta.ejecutar(sql);
+                rs = consulta.ejecutar(sql);
 
-            while (rs.next()) {
-                subempresas=new SubEmpresa();
-                subempresas.setNombre(rs.getString("nombre"));
-                subempresas.setNitsubempresa(rs.getString("nitsubempresa"));
-                subempresas.setEmpresa(new Empresa(nitem, ""));
-                listaSubempresas.add(subempresas);
-                
+                while (rs.next()) {
+                    subempresas=new SubEmpresa();
+                    subempresas.setNombre(rs.getString("nombre"));
+                    subempresas.setNitsubempresa(rs.getString("nitsubempresa"));
+                    subempresas.setEmpresa(new Empresa(nitem, ""));
+                    listaSubempresas.add(subempresas);
+
+                }
+            
             }
+            
+            if(codPerfil!=1){
+                consulta = new Consulta(getConexion());
+                String sql
+                        = " select nombre, nitsubempresa"
+                        + " from subempresa "
+                        + " where fk_nitempresa='"+nitem+"'";
+
+                rs = consulta.ejecutar(sql);
+
+                while (rs.next()) {
+                    subempresas=new SubEmpresa();
+                    subempresas.setNombre(rs.getString("nombre"));
+                    subempresas.setNitsubempresa(rs.getString("nitsubempresa"));
+                    subempresas.setEmpresa(new Empresa(nitem, ""));
+                    listaSubempresas.add(subempresas);
+
+                }
+            }
+            
             return listaSubempresas;
 
         } catch (SQLException ex) {

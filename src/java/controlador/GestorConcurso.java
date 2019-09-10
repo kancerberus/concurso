@@ -305,11 +305,11 @@ public class GestorConcurso extends Gestor implements Serializable{
             }
     }
     
-    public ArrayList<SubEmpresa> cargarListaSubempresas(String nitem) throws Exception {
+    public ArrayList<SubEmpresa> cargarListaSubempresas(String nitem, Integer perfil) throws Exception {
         try {
                 abrirConexion();
                 ConcursoDAO concursoDAO = new ConcursoDAO(conexion);
-                return concursoDAO.cargarListaSubempresas(nitem);
+                return concursoDAO.cargarListaSubempresas(nitem, perfil);
             } finally {
                 cerrarConexion();
             }

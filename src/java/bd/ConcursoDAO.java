@@ -349,6 +349,31 @@ public class ConcursoDAO {
         }
     }
     
+    public String buscarNombreEquipo(String nombre,String codConcurso) throws SQLException {
+        String existe="";
+        ResultSet rs = null;
+        Consulta consulta = null;
+        try {
+            consulta = new Consulta(this.conexion);
+            StringBuilder sql = new StringBuilder("select nombre "
+                    + " from campaña.grupo_concurso "
+                    + " where nombre='"+nombre+"' and cod_concurso='"+codConcurso+"'");
+            rs = consulta.ejecutar(sql);  
+            if (rs.next()){
+                existe=rs.getString("nombre");
+            }
+            
+            return existe;
+        } finally {
+            if (rs != null) {
+                rs.close();
+            }
+            if (consulta != null) {
+                consulta.desconectar();
+            }
+        }
+    }
+    
     
     public Integer guardarGrupoConcurso(GrupoConcurso grupoConcurso) throws SQLException {
         Consulta consulta = null;        

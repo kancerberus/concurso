@@ -219,9 +219,18 @@ public class UIConcurso implements Serializable {
                 this.getListaConcursosEmpresas();                       
                 invalido = true;
             }
+            
+            if (!grupoConcurso.getNombre().equals("")) {                
+                String existe=gestorConcurso.buscarNombreEquipo(grupoConcurso.getNombre(), grupoConcurso.getConcurso().getCodConcurso());                                
+                if(existe.equals(grupoConcurso.getNombre())){
+                    invalido = true;              
+                    util.mostrarMensaje("El nombre ya esta en uso!");
+                }                
+                
+            }
          
 
-            if (invalido == false) {  
+            if (invalido == false) {
                     Long codGrupoSeq= gestorConcurso.nextval(GestorConcurso.CAMPAÑA_GRUPO_CONCURSO_COD_GRUPO_SEQ);
                     grupoConcurso.setCodGrupo(codGrupoSeq.toString());
                     Integer resultado = gestorConcurso.guardarGrupoConcurso(grupoConcurso);

@@ -114,6 +114,16 @@ public class GestorConcurso extends Gestor implements Serializable{
         }    
     }
     
+    public String buscarNombreEquipo(String nombre, String codConcurso) throws Exception {            
+        try {
+            abrirConexion();
+            ConcursoDAO concursoDAO = new ConcursoDAO(conexion);
+            return concursoDAO.buscarNombreEquipo(nombre,codConcurso);
+        } finally {
+            cerrarConexion();
+        }    
+    }
+    
     public Integer guardarGrupoConcurso(GrupoConcurso grupoConcurso) throws Exception {            
         try {
             abrirConexion();

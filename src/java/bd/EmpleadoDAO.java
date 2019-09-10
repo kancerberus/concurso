@@ -59,7 +59,7 @@ public class EmpleadoDAO {
                     + "INNER JOIN cargo c on (c.cod_cargo=em.cargo) "
                     + "INNER JOIN det_lista det1 on (det1.cod_det_lista=em.cod_det_lista_sexo) "
                     + "INNER JOIN det_lista det2 on (det2.cod_det_lista=em.cod_det_lista_ecivil) "
-                    + " WHERE nitsubempresa ='" + nit +"' and cedula='" + cedula.trim() +"'";
+                    + " WHERE nitsubempresa ='" + nitsesion +"' and cedula='" + cedula.trim() +"'";
 
             rs = consulta.ejecutar(sql);
             if (rs.next()) {

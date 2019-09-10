@@ -46,13 +46,15 @@ and open the template in the editor.
                                     <p:selectOneMenu value="#{concursoBean.concurso.codConcurso}">
                                     <f:selectItem itemLabel="Seleccione..." itemValue="" />                                                
                                     <f:selectItems   value="#{concursoBean.listaConcursosEmpresas}" />                                      
-                                    <p:ajax listener="#{concursoBean.getListaGruposConcursos}" update="fieldParticipantes,gruposConcurso,logo"/>
+                                    <p:ajax listener="#{concursoBean.getListaGruposConcursos}" update="fieldParticipantes,gruposConcurso,logo,fechalim"/>
                                     </p:selectOneMenu>
                                     Nombre Equipo
                                     <p:inputText value="#{concursoBean.grupoConcurso.nombre}" />                                                        
                                     <p:commandButton icon="ui-icon-newwin" update="fieldParticipantes,gruposConcurso,avisoEquipos"  
                                                  type="submit" value="Crear Equipo"  actionListener="#{concursoBean.crearGrupoConcurso()}"/>
-                                    <p:graphicImage style="margin-left: 300%"  id="logo" value="#{concursoBean.concurso.logoDir}" width="80" height="30" cache="false"/>                                    
+                                    
+                                    <p:outputLabel id="fechalim" value="Fecha Limite Inscripcion: #{concursoBean.concurso.fecha_limite_insc}" style="font-weight: bolder" />
+                                    <p:graphicImage style="margin-left: 100%"  id="logo" value="#{concursoBean.concurso.logoDir}" width="80" height="30" cache="false"/>                                    
                                     </h:panelGrid>                                    
                                 </p:fieldset>
                                 

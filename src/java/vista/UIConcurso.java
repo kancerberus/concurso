@@ -278,7 +278,7 @@ public class UIConcurso implements Serializable {
             
             Date h=sumarDia(hoy, 1);
             hoy=h;
-            if (actividad.getFechaLimite().after(hoy)) {
+            if (actividad.getFechaLimite().before(hoy)) {
                 util.mostrarMensaje("Subir evidencias hasta! "+actividad.getFechaLimite());
                 invalido = true;
                 cargaEvidencias =true;
@@ -934,7 +934,7 @@ public class UIConcurso implements Serializable {
     public ArrayList<SelectItem> getListConcursosSubempresa() {
         try {                            
             
-                
+                concurso=new Concurso();
                 gestorConcurso = new GestorConcurso();                
                 listActividadess=new ArrayList<>();
                 

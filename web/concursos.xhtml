@@ -125,7 +125,10 @@ and open the template in the editor.
                                                  rowStyleClass="letra-xx-small-centro" style="font-size: 10px;width: 100%">                                        
                                                 <p:column headerText="Adjunto">
                                                     <h:outputText value="#{varAdjuntos.nombre}"/>
-                                                </p:column>                                                              
+                                                </p:column>                                      
+                                                <p:column headerText="Fecha Subido">
+                                                    <h:outputText value="#{varAdjuntos.fechaSubido}"/>
+                                                </p:column>                                      
                                             </p:dataTable>
                                         </p:column>
                                     </h:panelGrid>

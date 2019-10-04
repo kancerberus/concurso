@@ -5,6 +5,7 @@
  */
 package modelo;
 
+import java.util.Date;
 import org.primefaces.model.UploadedFile;
 
 /**
@@ -19,17 +20,19 @@ public class AdjuntosActividad {
     private String direccion;
     private GrupoConcurso grupoConcurso;
     private UploadedFile adj;
+    private Date fechaSubido;
 
     public AdjuntosActividad() {
 
     }  
 
-    public AdjuntosActividad(Integer codAdjunto, Actividad actividad, String nombre, String direccion, UploadedFile adj) {
+    public AdjuntosActividad(Integer codAdjunto, Actividad actividad, String nombre, String direccion, UploadedFile adj, Date fechaSubido) {
         this.codAdjunto = codAdjunto;
         this.actividad = actividad;
         this.nombre = nombre;
         this.direccion = direccion;
         this.adj = adj;
+        this.fechaSubido=fechaSubido;
     }
 
 // 
@@ -51,6 +54,14 @@ public class AdjuntosActividad {
 
     public UploadedFile getAdj() {
         return adj;
+    }
+
+    public Date getFechaSubido() {
+        return fechaSubido;
+    }
+
+    public void setFechaSubido(Date fechaSubido) {
+        this.fechaSubido = fechaSubido;
     }
 
     public void setAdj(UploadedFile adj) {

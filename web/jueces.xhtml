@@ -128,6 +128,7 @@ and open the template in the editor.
                                           <p:row>  
                                               <p:column  headerText="Opciones"/>
                                               <p:column headerText="Nombre" filterBy="#{varVerAdjuntos.nombre}" sortBy="#{varVerAdjuntos.nombre}"/>                                              
+                                              <p:column headerText="Fecha Subido"/>
                                           </p:row> 
                                       </p:columnGroup>
 
@@ -138,7 +139,10 @@ and open the template in the editor.
                                       </p:column>
                                       <p:column>
                                           <h:outputText value="#{varVerAdjuntos.nombre}"/>
-                                      </p:column>                                     
+                                      </p:column>                                 
+                                      <p:column>
+                                          <h:outputText value="#{varVerAdjuntos.fechaSubido}"/>
+                                      </p:column>                                 
                                       
                                   </p:dataTable>
                                 

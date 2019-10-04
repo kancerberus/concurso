@@ -867,6 +867,7 @@ public class UIConcurso implements Serializable {
     
     public void upload(FileUploadEvent event) throws Exception {
         String msg=null;
+        Date hoy=new Date();
         try {            
             
             String ruta = "C:/Concursos/"+actividad.getGrupoConcurso().getConcurso().getEmpresa().getNombre()+"/"+
@@ -887,7 +888,7 @@ public class UIConcurso implements Serializable {
             }else{
                 UtilArchivo.guardarStream(ruta.trim() + File.separator + event.getFile().getFileName(), event.getFile().getInputstream());
                 this.file = event.getFile();
-                gestorConcurso.guardarDatosAdjuntos(file, actividad, ruta);
+                gestorConcurso.guardarDatosAdjuntos(file, actividad, ruta, hoy);
             }
             this.cargarAdjuntos();
         } catch (IOException ex) {            

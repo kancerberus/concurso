@@ -16,6 +16,7 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import modelo.Actividad;
@@ -202,7 +203,7 @@ public class ConcursoDAO {
     }
     
     
-    public Integer guardarDatosAdjuntos(UploadedFile file, Actividad actividad, String ruta) throws SQLException {
+    public Integer guardarDatosAdjuntos(UploadedFile file, Actividad actividad, String ruta, Date hoy) throws SQLException {
         Consulta consulta = null;        
         Integer resultado;
         
@@ -211,12 +212,13 @@ public class ConcursoDAO {
             
             //Sentencia SQL para guardar el registro
                 String sql = "INSERT INTO campaña.adjuntos_actividad ("
-                        + " cod_actividad, nombre, direccion, cod_grupo ) "                        
+                        + " cod_actividad, nombre, direccion, cod_grupo, fecha_subido ) "                        
                         + "VALUES ("
                         + "'" + actividad.getCodActividad() +"',"
                         + "'" + file.getFileName() + "',"
                         + "'" + ruta + "',"                        
-                        + "'" + actividad.getGrupoConcurso().getCodGrupo() + "')";
+                        + "'" + actividad.getGrupoConcurso().getCodGrupo() + "',"
+                        + "'" + hoy + "')";
 
             resultado = consulta.actualizar(sql);
             return resultado;
@@ -631,7 +633,7 @@ public class ConcursoDAO {
             
             consulta = new Consulta(getConexion());
             String sql
-                    = " SELECT cod_adjunto, nombre " +
+                    = " SELECT cod_adjunto, nombre, fecha_subido " +
                         " from campaña.adjuntos_actividad " +
                         " where cod_actividad='"+actividad.getCodActividad()+"' and cod_grupo='"+actividad.getGrupoConcurso().getCodGrupo()+"'";
 
@@ -641,6 +643,7 @@ public class ConcursoDAO {
                 adjuntosActividad=new AdjuntosActividad();
                 adjuntosActividad.setCodAdjunto(rs.getInt("cod_adjunto"));
                 adjuntosActividad.setNombre(rs.getString("nombre").trim());
+                adjuntosActividad.setFechaSubido(rs.getDate("fecha_subido"));
                 listaAdjuntosActividad.add(adjuntosActividad);
             }
             return listaAdjuntosActividad;
@@ -661,7 +664,7 @@ public class ConcursoDAO {
             
             consulta = new Consulta(getConexion());
             String sql
-                    = " select nombre, direccion, cod_grupo, cod_adjunto " +
+                    = " select nombre, direccion, cod_grupo, cod_adjunto, fecha_subido " +
                     "from campaña.adjuntos_actividad " +
                     "where cod_actividad='"+calificacionActividad.getCodActividad()+"' and cod_grupo='"+calificacionActividad.getCodGrupo()+"' ";
 
@@ -672,6 +675,7 @@ public class ConcursoDAO {
                 adjActividad.setCodAdjunto(rs.getInt("cod_adjunto"));
                 adjActividad.setNombre(rs.getString("nombre").trim());
                 adjActividad.setDireccion(rs.getString("direccion").trim());
+                adjActividad.setFechaSubido(rs.getDate("fecha_subido"));
                 adjActividad.setGrupoConcurso(new GrupoConcurso(rs.getString("cod_grupo"),null, null, null,null,null));
                 listaAdjuntosActividadJueces.add(adjActividad);
             }

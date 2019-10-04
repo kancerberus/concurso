@@ -8,6 +8,7 @@ import bd.ConcursoDAO;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Date;
 import modelo.Actividad;
 import modelo.AdjuntosActividad;
 import modelo.CalificacionActividad;
@@ -84,11 +85,11 @@ public class GestorConcurso extends Gestor implements Serializable{
         }    
     }
     
-    public Integer guardarDatosAdjuntos(UploadedFile file, Actividad actividad, String ruta) throws Exception {            
+    public Integer guardarDatosAdjuntos(UploadedFile file, Actividad actividad, String ruta, Date hoy) throws Exception {            
         try {
             abrirConexion();
             ConcursoDAO concursoDAO = new ConcursoDAO(conexion);
-            return concursoDAO.guardarDatosAdjuntos(file, actividad, ruta);
+            return concursoDAO.guardarDatosAdjuntos(file, actividad, ruta, hoy);
         } finally {
             cerrarConexion();
         }    
